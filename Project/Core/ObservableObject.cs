@@ -17,4 +17,4 @@ namespace Project.Core
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
-}
+} 
