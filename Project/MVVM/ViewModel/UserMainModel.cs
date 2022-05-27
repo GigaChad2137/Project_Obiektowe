@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 
 namespace Project.MVVM.ViewModel
 {
-    class MainViewModel : ObservableObject
+    class UserMainModel : ObservableObject
     {
-        public RelayCommand PracownicyViewCommand { get; set; }
+        public RelayCommand UserVievCommand { get; set; }
         public RelayCommand HomeViewCommand { get; set; }
-        public RelayCommand DiscoveryViewCommand { get; set; }
 
-        public PracownicyViewModel PracownicyVM { get; set; }
-
+        public UserViewModel UserVM { get; set; }
         public HomeViewModel HomeVM { get; set; }
-        public DodajPracownikaViewModel DiscoveryVM { get; set; }
+
         private object _currentView;
         public object CurrentView
         {
@@ -28,23 +26,19 @@ namespace Project.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
-        public MainViewModel()
+        public UserMainModel()
         {
-            PracownicyVM = new PracownicyViewModel();
+            UserVM = new UserViewModel();
             HomeVM = new HomeViewModel();
-            DiscoveryVM = new DodajPracownikaViewModel();
+           
             CurrentView = HomeVM;
             HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVM;
             });
-            DiscoveryViewCommand = new RelayCommand(o =>
+            UserVievCommand = new RelayCommand(o =>
             {
-                CurrentView = DiscoveryVM;
-            });
-            PracownicyViewCommand = new RelayCommand(o =>
-            {
-                CurrentView = PracownicyVM;
+                CurrentView = UserVM;
             });
         }
     }

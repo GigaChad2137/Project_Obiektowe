@@ -67,6 +67,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MVVM\ViewModel\UserViewModel.cs" />
+    <Compile Include="UserMainWindow.xaml.cs">
+      <DependentUpon>UserMainWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,12 +105,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\ViewModel\DodajPracownikaViewModel.cs" />
     <Compile Include="MVVM\ViewModel\HomeViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PracownicyViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\UserMainModel.cs" />
     <Compile Include="MVVM\View\DodajPracownikaVIew.xaml.cs">
       <DependentUpon>DodajPracownikaVIew.xaml</DependentUpon>
     </Compile>
