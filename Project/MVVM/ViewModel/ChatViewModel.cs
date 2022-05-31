@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project.MVVM.ViewModel
 {
-    class HomeViewModel
+    class ChatViewModel
     {
-
     }
 }

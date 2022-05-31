@@ -12,12 +12,12 @@ namespace Project.MVVM.ViewModel
     {
         public RelayCommand PracownicyViewCommand { get; set; }
         public RelayCommand HomeViewCommand { get; set; }
-        public RelayCommand DiscoveryViewCommand { get; set; }
+        public RelayCommand DodajPracownikaViewCommand { get; set; }
 
         public PracownicyViewModel PracownicyVM { get; set; }
 
         public HomeViewModel HomeVM { get; set; }
-        public DodajPracownikaViewModel DiscoveryVM { get; set; }
+        public DodajPracownikaViewModel DodajPracownikaVM { get; set; }
         private object _currentView;
         public object CurrentView
         {
@@ -32,15 +32,15 @@ namespace Project.MVVM.ViewModel
         {
             PracownicyVM = new PracownicyViewModel();
             HomeVM = new HomeViewModel();
-            DiscoveryVM = new DodajPracownikaViewModel();
+            DodajPracownikaVM = new DodajPracownikaViewModel();
             CurrentView = HomeVM;
             HomeViewCommand = new RelayCommand(o =>
             {
                 CurrentView = HomeVM;
             });
-            DiscoveryViewCommand = new RelayCommand(o =>
+            DodajPracownikaViewCommand = new RelayCommand(o =>
             {
-                CurrentView = DiscoveryVM;
+                CurrentView = DodajPracownikaVM;
             });
             PracownicyViewCommand = new RelayCommand(o =>
             {

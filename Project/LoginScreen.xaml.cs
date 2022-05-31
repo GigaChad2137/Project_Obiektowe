@@ -50,14 +50,7 @@ namespace Project
                         {
 
 
-                            var std = new users()
-                            {
-                                username = "bill",
-                                password = "12345"
-                            };
-                            db.users.Add(std);
-
-                            db.SaveChanges();
+                     
 
 
                             UserMainWindow dashboard = new UserMainWindow();
@@ -69,6 +62,14 @@ namespace Project
                     }
                     else
                     {
+                        var std = new users()
+                        {
+                            username = "bill",
+                            password = "12345"
+                        };
+                        db.users.Add(std);
+
+                        db.SaveChanges();
 
                         MessageBox.Show($" aaaddd");
                     }

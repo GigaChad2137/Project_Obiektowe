@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c36385f64fdd48ec828f0afebea0dd53" Name="Diagram1">
+        <EntityTypeShape EntityType="baza_projektModel.roles" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="baza_projektModel.user_roles" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="baza_projektModel.users" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <AssociationConnector Association="baza_projektModel.FK__user_role__id_ro__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="baza_projektModel.FK__user_role__id_us__403A8C7D" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="baza_projektModel.praca" Width="1.5" PointX="3" PointY="8.375" />
+        <EntityTypeShape EntityType="baza_projektModel.wiadomosci" Width="1.5" PointX="3" PointY="3.5" />
+        <EntityTypeShape EntityType="baza_projektModel.zarobki" Width="1.5" PointX="3" PointY="6.125" />
+        <AssociationConnector Association="baza_projektModel.FK__praca__Id_pracow__4BAC3F29" />
+        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" />
+        <AssociationConnector Association="baza_projektModel.FK__zarobki__Id_prac__4F7CD00D" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

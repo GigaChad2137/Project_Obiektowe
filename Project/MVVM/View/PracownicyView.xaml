@@ -29,6 +29,9 @@
                     <DataGridTextColumn Header="Rola "   Binding="{Binding Rola_pracownika}" Width="100"/>
                     <DataGridTextColumn Header="Zarobki"  Binding="{Binding Zarobki_Pracownika}"  Width="100"/>
                     <DataGridTextColumn Header="Czy Pracuje"   Binding="{Binding Czy_pracuje}" Width="100"/>
+                    <DataGridComboBoxColumn Header="Czy dd"    Width="100">
+                  
+                    </DataGridComboBoxColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
