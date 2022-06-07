@@ -14,7 +14,6 @@
             <Label Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"></Label>
             <Separator Background="White"></Separator>
             <ComboBox Name="comboBox1" Width="220"
-            ItemsSource="{StaticResource myVacations}"
             Text="My Cities"
             IsEditable="true"
             IsReadOnly="true"/>

@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
+
 
 namespace Project.MVVM.View
 {
@@ -32,108 +34,86 @@ namespace Project.MVVM.View
             byte[] hashed_Data;
             var reg_user = Register_username.Text;
             var reg_passwd = Register_password.Password;
-
-            //To do : zmienic SqlConnection na framework Entity
-            SqlConnection sqlCon = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf;Integrated Security=True");
-            SqlTransaction transaction;
-
-            if (sqlCon.State == System.Data.ConnectionState.Closed)
-                sqlCon.Open();
-
-            try
+            var reg_retype_passwd = Register_retypePassword.Password;
+            var reg_imie = Register_Imie.Text;
+            var reg_nazwisko = Register_Nazwisko.Text;
+            DateTime today = DateTime.Today;
+            var reg_zarobki_check =Int32.TryParse(Register_Zarobki.Text, out int reg_zarobki);
+            using (DBPROJECT db = new DBPROJECT())
             {
-                transaction = sqlCon.BeginTransaction();
-                string query = "SELECT COUNT(1) from users Where username=@username";
-                SqlCommand sqlCmd = new SqlCommand(query, sqlCon, transaction);
-                sqlCmd.CommandType = System.Data.CommandType.Text;
-                sqlCmd.Parameters.AddWithValue("@username", Register_username.Text);
-                int count = Convert.ToInt32(sqlCmd.ExecuteScalar());
-                if (count == 1)
+                using (var contex = db.Database.BeginTransaction())
                 {
-                    MessageBox.Show("Podany użytkownik już istnieje");
-                }
-                else
-                {
-                    if (reg_user != "" && reg_user.Length > 4)
-                    {
-                        if (reg_passwd == Register_retypePassword.Password && reg_passwd != "" && reg_passwd.Length > 4 && reg_passwd.Length < 20)
+                   
+
+               
+                      
+                        if (db.users.Where(c => c.username == reg_user).Count() > 0)
                         {
-                            Source = ASCIIEncoding.ASCII.GetBytes(Register_retypePassword.Password);
-                            hashed_Data = new MD5CryptoServiceProvider().ComputeHash(Source);
-                            string passwd_hash = Convert.ToBase64String(hashed_Data);
-
-
-
-                            string query_user = "Insert Into users (username,password) values(@username,@password)";
-                            SqlCommand sql_register = new SqlCommand(query_user, sqlCon, transaction);
-                            sql_register.CommandType = System.Data.CommandType.Text;
-                            sql_register.Parameters.AddWithValue("@username", Register_username.Text);
-                            sql_register.Parameters.AddWithValue("@password", passwd_hash);
-                            sql_register.ExecuteNonQuery();
-                            transaction.Commit();
-
-                            string query_for_id = "Select Id from users where username=@username";
-                            SqlCommand sql_id = new SqlCommand(query_for_id, sqlCon, transaction);
-                            sql_id.CommandType = System.Data.CommandType.Text;
-                            sql_id.Parameters.AddWithValue("@username", Register_username.Text);
-                            int To = Convert.ToInt32(sql_id.ExecuteScalar());
-
-
-                            string query_rola = "Insert Into user_roles (id_user,id_role) values(@id,@rola)";
-                            SqlCommand sql_rola = new SqlCommand(query_rola, sqlCon);
-                            sql_rola.Parameters.AddWithValue("@id", To);
-                            if (Register_czy_szef.IsChecked == true)
-                            {
-                                int rola = 2;
-                                sql_rola.Parameters.AddWithValue("@rola", rola);
-                            }
-                            else
-                            {
-                                int rola = 1;
-                                sql_rola.Parameters.AddWithValue("@rola", rola);
-                            }
-                            sql_rola.ExecuteNonQuery();
-                            MessageBox.Show("Pracownik dodany");
-
-
-                        }
-                        else if (reg_passwd == "")
-                        {
-                            MessageBox.Show("Hasło nie może być puste");
-                        }
-                        else if (reg_passwd.Length < 4 || reg_passwd.Length > 20)
-                        {
-                            MessageBox.Show("Hasło musi zawierać się miedzy 4 a 20 znaków.");
+                            MessageBox.Show("Podany użytkownik już istnieje");
                         }
                         else
                         {
-                            MessageBox.Show("Hasła nie są takie same");
-                        }
+                            if (reg_user != "" && reg_user.Length > 4)
+                            {
+                                if (reg_passwd == reg_retype_passwd && reg_passwd != "" && reg_passwd.Length > 4 && reg_passwd.Length < 20 && reg_zarobki > 0 && reg_imie != null && reg_nazwisko != null)
+                                {
+                                    Source = ASCIIEncoding.ASCII.GetBytes(Register_retypePassword.Password);
+                                    hashed_Data = new MD5CryptoServiceProvider().ComputeHash(Source);
+                                    string passwd_hash = Convert.ToBase64String(hashed_Data);
+                                    users new_usr = new users { username = Register_username.Text, password = passwd_hash };
+                                    db.users.Add(new_usr);
+                                    
+
+                                   
+                                 
+                                    if (Register_czy_szef.IsChecked == true)
+                                    {
+                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 2 });
+                                    }
+                                    else
+                                    {
+                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 1 });
+                                    }
+                                    db.informacje_personalne.Add(new informacje_personalne { Id_pracownika = new_usr.Id, Imie = reg_imie, Nazwisko = reg_nazwisko, Zarobki = reg_zarobki,Dni_urlopowe=30,Data_zatrudnienia= today });
+                                    MessageBox.Show("Pracownik dodany");
+                                    
+
+                                }
+                                else if (reg_passwd == "")
+                                {
+                                    MessageBox.Show("Hasło nie może być puste xd");
+                                }
+                                else if (reg_passwd.Length <= 4 || reg_passwd.Length > 20)
+                                {
+                                    MessageBox.Show("Hasło musi zawierać się miedzy 4 a 20 znaków.");
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Hasła nie są takie same");
+                                }
+
+                            }
+                            else if (reg_user.Length < 4 || reg_user.Length > 20)
+                            {
+                                MessageBox.Show("Użytkownik musi zawierać się miedzy 4 a 20 znaków.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("Uzupełnij wszystkie pola");
+                            }
 
                     }
-                    else if (reg_user.Length < 4 || reg_user.Length > 20)
-                    {
-                        MessageBox.Show("Użytkownik musi zawierać się miedzy 4 a 20 znaków.");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hasło nie może być puste");
-                    }
+                    db.SaveChanges();
+                    contex.Commit();
 
                 }
-
-
+                   
             }
-            catch (Exception ea)
-            {
-                MessageBox.Show(ea.Message);
-
-            }
-            finally
-            {
-                sqlCon.Close();
-            }
-
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

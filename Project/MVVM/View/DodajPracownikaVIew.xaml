@@ -7,18 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="#1B1B1B">
     <Border Background="#2e2a4a" CornerRadius="20" Margin="20">
-        <StackPanel Margin="20" Background="#2e2a4a">
+        <StackPanel Margin="20,5,20,20" Background="#2e2a4a">
 
             <Label Content="Dodaj Pracownika" Foreground="White" FontSize="25" HorizontalAlignment="Center"></Label>
             <Separator Background="White"></Separator>
             <Label Content="Username" Margin="179,0,0,0" Foreground="White"/>
-            <TextBox Name="Register_username" Background="WhiteSmoke"  Width="250" Foreground="Black" FontSize="18"></TextBox>
+            <TextBox Name="Register_username" Background="WhiteSmoke"  Width="250" Foreground="Black" FontSize="15" Height="20"></TextBox>
+            <Label Content="Imie" Margin="179,0,0,0" Foreground="White"/>
+            <TextBox Name="Register_Imie" Background="WhiteSmoke"  Width="250" Foreground="Black" FontSize="15"  Height="20"></TextBox>
+            <Label Content="Nazwisko" Margin="179,0,0,0" Foreground="White"/>
+            <TextBox Name="Register_Nazwisko" Background="WhiteSmoke"  Width="250" Foreground="Black" FontSize="15"  Height="20"></TextBox>
+            <Label Content="Zarobki" Margin="179,0,0,0" Foreground="White"/>
+            <TextBox Name="Register_Zarobki" Background="WhiteSmoke"  PreviewTextInput="NumberValidationTextBox"  Width="250" Foreground="Black" FontSize="15"  Height="20"></TextBox>
             <Label Content="Password" Foreground="White" Margin="179,0,0,0"/>
-            <PasswordBox Name="Register_password" Background="WhiteSmoke"  Foreground="Black" FontSize="18" Width="250"></PasswordBox>
+            <PasswordBox Name="Register_password" Background="WhiteSmoke"  Foreground="Black" FontSize="15" Width="250"  Height="20"></PasswordBox>
             <Label Content="Retype Password" Foreground="White" Margin="179,0,0,0"/>
-            <PasswordBox Name="Register_retypePassword" Background="WhiteSmoke"  Foreground="Black" FontSize="18" Width="250"></PasswordBox>
-            <Label Content="Czy pracownik jest adminem:" FontSize="18" Foreground="White" Margin="179,0,0,0"/>
-            <Separator Background="White" Width="255"></Separator>
+            <PasswordBox Name="Register_retypePassword" Background="WhiteSmoke"  Foreground="Black" FontSize="15" Width="250"  Height="20"></PasswordBox>
+            <Label Content="Czy pracownik jest adminem:" FontSize="15" Foreground="White" Margin="179,0,0,0"/>
             <CheckBox Content="Tak" Name="Register_czy_szef" FontSize="16" Margin="181,0,0,0" Foreground="White" />
 
 

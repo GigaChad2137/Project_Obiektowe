@@ -31,12 +31,11 @@ namespace Project
            
             try
             {
-                //to do dodac entity fframework baza danych
                 using (var db = new DBPROJECT())
                 {
-
                     if (db.users.Where(c => c.username == txtUsername.Text && c.password == txtPassword.Password).Count() > 0)
                     {
+
                         var id_finder = from c in db.users where c.username == txtUsername.Text select c;
                         var id_checker = id_finder.FirstOrDefault<users>();
                         if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
@@ -48,30 +47,14 @@ namespace Project
                         else
          
                         {
-
-
-                     
-
-
                             UserMainWindow dashboard = new UserMainWindow();
                             dashboard.Show();
                             this.Close();
                         }
-
-
                     }
                     else
                     {
-                        var std = new users()
-                        {
-                            username = "bill",
-                            password = "12345"
-                        };
-                        db.users.Add(std);
-
-                        db.SaveChanges();
-
-                        MessageBox.Show($" aaaddd");
+                        MessageBox.Show($"Użytkownik lub hasło niepoprawne");
                     }
                 }
 
@@ -80,8 +63,6 @@ namespace Project
             {
                 MessageBox.Show(ea.Message);
             }
-          
-
         }
       
         private string GetHashedText(string inputData)

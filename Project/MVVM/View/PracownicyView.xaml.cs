@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.Diagnostics;
 
 namespace Project.MVVM.View
 {
@@ -24,84 +24,81 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             // Todo: podlaczyc baze danych i zaladowac modele
-            DBPROJECT db = new DBPROJECT();
-             PracownicyGrid.Items.Add(new Pracownicy
-                    {
-                        id_pracownika = 3,
-                        Nazwa_pracownika = "dsdasdas",
-                        Rola_pracownika = "amin",
-                        Czy_pracuje = false,
-                        Zarobki_Pracownika = 3333
-                    }
-                    );
 
-            var id_finder = (from users in db.users
-                             join user_roles in db.user_roles on users.Id equals user_roles.id_user
-                             join roles in db.roles on user_roles.id_role equals roles.Id
-                             join zarobki in db.zarobki on users.Id equals zarobki.Id_pracownika
-                             select new
-                             {
-                                 Id = users.Id,
-                                 Name = users.username,
-                                 Rola = roles.role,
-                                 Zarobas = zarobki.Zarobek,
-
-
-                             }).ToList();
-            foreach (var p in id_finder)
+            using (DBPROJECT db = new DBPROJECT())
             {
-
-                DateTime thisDay = DateTime.Today;
-                if (db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0)
+                using(var contex = db.Database.BeginTransaction())
                 {
-                    var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == thisDay select c;
-                    var praca_checker = sprawdzacz_czy_pracuje.FirstOrDefault<praca>();
-
-
-                    PracownicyGrid.Items.Add(new Pracownicy
+                    var id_finder = (from users in db.users
+                                     join user_roles in db.user_roles on users.Id equals user_roles.id_user
+                                     join roles in db.roles on user_roles.id_role equals roles.Id
+                                     join inf_p in db.informacje_personalne on users.Id equals inf_p.Id_pracownika
+                                     orderby users.Id descending
+                                     select new
+                                     {
+                                         Id = users.Id,
+                                         Imie = inf_p.Imie,
+                                         Nazwisko = inf_p.Nazwisko,
+                                         Rola = roles.role,
+                                         Zarobki = inf_p.Zarobki,
+                                         Dni_urlopu = inf_p.Dni_urlopowe
+                                     }).ToList();
+                    foreach (var p in id_finder)
                     {
-                        id_pracownika = p.Id,
-                        Nazwa_pracownika = p.Name,
-                        Rola_pracownika = p.Rola,
-                        Czy_pracuje = (bool)praca_checker.Czy_pracuje,
-                        Zarobki_Pracownika = p.Zarobas
+                        DateTime thisDay = DateTime.Now;
+                        Trace.WriteLine(thisDay);
+                        Trace.WriteLine(p);
+                        Trace.WriteLine(db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0);
+                        if (db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0)
+                        {
+                            var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == thisDay select c;
+                            var praca_checker = sprawdzacz_czy_pracuje.FirstOrDefault<praca>();
+
+
+                            PracownicyGrid.Items.Add(new Pracownicy
+                            {
+                                Imie_pracownika = p.Imie,
+                                Nazwisko_pracownika = p.Nazwisko,
+                                Rola_pracownika = p.Rola,
+                                Zarobki_pracownika = p.Zarobki,
+                                Czy_pracuje = praca_checker.Czy_pracuje,
+                                Urlop_pracownika = p.Dni_urlopu
+                            }
+                            );
+
+                        }
+                        else
+                        {
+                            var pracownik = db.Set<praca>();
+                            db.praca.Add(new praca { Id_pracownika = p.Id, Data = default, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Poza Pracą" });
+                            db.SaveChanges();
+
+                            PracownicyGrid.Items.Add(new Pracownicy
+                            {
+                                Imie_pracownika = p.Imie,
+                                Nazwisko_pracownika = p.Nazwisko,
+                                Rola_pracownika = p.Rola,
+                                Zarobki_pracownika = p.Zarobki,
+                                Czy_pracuje = "Poza Pracą",
+                                Urlop_pracownika = p.Dni_urlopu
+                            });
+                            
+                        }
                     }
-                    );
-                    
+                    contex.Commit();
                 }
-                else
-                {
-
-                    var pracownik = db.Set<praca>();
-                    db.praca.Add(new praca { Id_pracownika = p.Id, Data = default, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = false });
-                    db.SaveChanges();
-
-                    PracownicyGrid.Items.Add(new Pracownicy
-                    {
-                        id_pracownika = p.Id,
-                        Nazwa_pracownika = p.Name,
-                        Rola_pracownika = p.Rola,
-                        Czy_pracuje = false,
-                        Zarobki_Pracownika = p.Zarobas
-                    });
-                }
-
-
-
             }
-
-
         }
-
-
         public class Pracownicy
         {
 
-            public int id_pracownika { get; set; }
-            public string Nazwa_pracownika { get; set; }
+            public string Imie_pracownika { get; set; }
+            public string Nazwisko_pracownika { get; set; }
             public string Rola_pracownika { get; set; }
-            public bool Czy_pracuje { get; set; }
-            public int Zarobki_Pracownika { get; set; }
+            public int Zarobki_pracownika { get; set; }
+            public string Czy_pracuje { get; set; }
+          
+            public int Urlop_pracownika { get; set; }
         }
 
         private void PracownicyGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -5,15 +5,27 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="baza_projektModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="praca">
+        <EntityType Name="informacje_personalne">
           <Key>
             <PropertyRef Name="Id_pracownika" />
           </Key>
           <Property Name="Id_pracownika" Type="int" Nullable="false" />
+          <Property Name="Imie" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nazwisko" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Zarobki" Type="int" Nullable="false" />
+          <Property Name="Dni_urlopowe" Type="int" Nullable="false" />
+          <Property Name="Data_zatrudnienia" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="praca">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_pracownika" Type="int" Nullable="false" />
           <Property Name="Data" Type="date" Nullable="false" />
           <Property Name="Data_rozpoczecia" Type="smalldatetime" />
           <Property Name="Data_zakonczenia" Type="smalldatetime" />
-          <Property Name="Czy_pracuje" Type="bit" />
+          <Property Name="Czy_pracuje" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="roles">
           <Key>
@@ -45,16 +57,21 @@
           <Property Name="Wiadomosc" Type="varchar(max)" />
           <Property Name="czy_przeczytane" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="zarobki">
-          <Key>
-            <PropertyRef Name="Id_pracownika" />
-          </Key>
-          <Property Name="Id_pracownika" Type="int" Nullable="false" />
-          <Property Name="Zarobek" Type="int" Nullable="false" />
-        </EntityType>
-        <Association Name="FK__praca__Id_pracow__4BAC3F29">
+        <Association Name="FK__informacj__Id_pr__0F624AF8">
           <End Role="users" Type="Self.users" Multiplicity="1" />
-          <End Role="praca" Type="Self.praca" Multiplicity="0..1" />
+          <End Role="informacje_personalne" Type="Self.informacje_personalne" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="informacje_personalne">
+              <PropertyRef Name="Id_pracownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__praca__Id_pracow__04E4BC85">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="praca" Type="Self.praca" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
               <PropertyRef Name="Id" />
@@ -100,26 +117,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__zarobki__Id_prac__4F7CD00D">
-          <End Role="users" Type="Self.users" Multiplicity="1" />
-          <End Role="zarobki" Type="Self.zarobki" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="zarobki">
-              <PropertyRef Name="Id_pracownika" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="baza_projektModelStoreContainer">
+          <EntitySet Name="informacje_personalne" EntityType="Self.informacje_personalne" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="praca" EntityType="Self.praca" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_roles" EntityType="Self.user_roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="wiadomosci" EntityType="Self.wiadomosci" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="zarobki" EntityType="Self.zarobki" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__praca__Id_pracow__4BAC3F29" Association="Self.FK__praca__Id_pracow__4BAC3F29">
+          <AssociationSet Name="FK__informacj__Id_pr__0F624AF8" Association="Self.FK__informacj__Id_pr__0F624AF8">
+            <End Role="users" EntitySet="users" />
+            <End Role="informacje_personalne" EntitySet="informacje_personalne" />
+          </AssociationSet>
+          <AssociationSet Name="FK__praca__Id_pracow__04E4BC85" Association="Self.FK__praca__Id_pracow__04E4BC85">
             <End Role="users" EntitySet="users" />
             <End Role="praca" EntitySet="praca" />
           </AssociationSet>
@@ -134,10 +143,6 @@
           <AssociationSet Name="FK__wiadomosc__Id_pr__534D60F1" Association="Self.FK__wiadomosc__Id_pr__534D60F1">
             <End Role="users" EntitySet="users" />
             <End Role="wiadomosci" EntitySet="wiadomosci" />
-          </AssociationSet>
-          <AssociationSet Name="FK__zarobki__Id_prac__4F7CD00D" Association="Self.FK__zarobki__Id_prac__4F7CD00D">
-            <End Role="users" EntitySet="users" />
-            <End Role="zarobki" EntitySet="zarobki" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -169,9 +174,9 @@
           <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="user_roles" Relationship="Self.FK__user_role__id_us__403A8C7D" FromRole="users" ToRole="user_roles" />
-          <NavigationProperty Name="praca" Relationship="baza_projektModel.FK__praca__Id_pracow__4BAC3F29" FromRole="users" ToRole="praca" />
           <NavigationProperty Name="wiadomosci" Relationship="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" FromRole="users" ToRole="wiadomosci" />
-          <NavigationProperty Name="zarobki" Relationship="baza_projektModel.FK__zarobki__Id_prac__4F7CD00D" FromRole="users" ToRole="zarobki" />
+          <NavigationProperty Name="informacje_personalne" Relationship="baza_projektModel.FK__informacj__Id_pr__0F624AF8" FromRole="users" ToRole="informacje_personalne" />
+          <NavigationProperty Name="praca" Relationship="baza_projektModel.FK__praca__Id_pracow__04E4BC85" FromRole="users" ToRole="praca" />
         </EntityType>
         <Association Name="FK__user_role__id_ro__412EB0B6">
           <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
@@ -209,33 +214,22 @@
             <End Role="users" EntitySet="users" />
             <End Role="user_roles" EntitySet="user_roles" />
           </AssociationSet>
-          <EntitySet Name="praca" EntityType="baza_projektModel.praca" />
           <EntitySet Name="wiadomosci" EntityType="baza_projektModel.wiadomosci" />
-          <EntitySet Name="zarobki" EntityType="baza_projektModel.zarobki" />
-          <AssociationSet Name="FK__praca__Id_pracow__4BAC3F29" Association="baza_projektModel.FK__praca__Id_pracow__4BAC3F29">
-            <End Role="users" EntitySet="users" />
-            <End Role="praca" EntitySet="praca" />
-          </AssociationSet>
           <AssociationSet Name="FK__wiadomosc__Id_pr__534D60F1" Association="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1">
             <End Role="users" EntitySet="users" />
             <End Role="wiadomosci" EntitySet="wiadomosci" />
           </AssociationSet>
-          <AssociationSet Name="FK__zarobki__Id_prac__4F7CD00D" Association="baza_projektModel.FK__zarobki__Id_prac__4F7CD00D">
+          <EntitySet Name="informacje_personalne" EntityType="baza_projektModel.informacje_personalne" />
+          <EntitySet Name="praca" EntityType="baza_projektModel.praca" />
+          <AssociationSet Name="FK__informacj__Id_pr__0F624AF8" Association="baza_projektModel.FK__informacj__Id_pr__0F624AF8">
             <End Role="users" EntitySet="users" />
-            <End Role="zarobki" EntitySet="zarobki" />
+            <End Role="informacje_personalne" EntitySet="informacje_personalne" />
+          </AssociationSet>
+          <AssociationSet Name="FK__praca__Id_pracow__04E4BC85" Association="baza_projektModel.FK__praca__Id_pracow__04E4BC85">
+            <End Role="users" EntitySet="users" />
+            <End Role="praca" EntitySet="praca" />
           </AssociationSet>
         </EntityContainer>
-        <EntityType Name="praca">
-          <Key>
-            <PropertyRef Name="Id_pracownika" />
-          </Key>
-          <Property Name="Id_pracownika" Type="Int32" Nullable="false" />
-          <Property Name="Data" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Data_rozpoczecia" Type="DateTime" Precision="0" />
-          <Property Name="Data_zakonczenia" Type="DateTime" Precision="0" />
-          <Property Name="Czy_pracuje" Type="Boolean" />
-          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__praca__Id_pracow__4BAC3F29" FromRole="praca" ToRole="users" />
-        </EntityType>
         <EntityType Name="wiadomosci">
           <Key>
             <PropertyRef Name="Id_pracownika" />
@@ -245,26 +239,6 @@
           <Property Name="czy_przeczytane" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="users" Relationship="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" FromRole="wiadomosci" ToRole="users" />
         </EntityType>
-        <EntityType Name="zarobki">
-          <Key>
-            <PropertyRef Name="Id_pracownika" />
-          </Key>
-          <Property Name="Id_pracownika" Type="Int32" Nullable="false" />
-          <Property Name="Zarobek" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__zarobki__Id_prac__4F7CD00D" FromRole="zarobki" ToRole="users" />
-        </EntityType>
-        <Association Name="FK__praca__Id_pracow__4BAC3F29">
-          <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
-          <End Type="baza_projektModel.praca" Role="praca" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="praca">
-              <PropertyRef Name="Id_pracownika" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK__wiadomosc__Id_pr__534D60F1">
           <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
           <End Type="baza_projektModel.wiadomosci" Role="wiadomosci" Multiplicity="0..1" />
@@ -277,14 +251,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__zarobki__Id_prac__4F7CD00D">
+        <EntityType Name="informacje_personalne">
+          <Key>
+            <PropertyRef Name="Id_pracownika" />
+          </Key>
+          <Property Name="Id_pracownika" Type="Int32" Nullable="false" />
+          <Property Name="Imie" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nazwisko" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Zarobki" Type="Int32" Nullable="false" />
+          <Property Name="Dni_urlopowe" Type="Int32" Nullable="false" />
+          <Property Name="Data_zatrudnienia" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__informacj__Id_pr__0F624AF8" FromRole="informacje_personalne" ToRole="users" />
+        </EntityType>
+        <EntityType Name="praca">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_pracownika" Type="Int32" Nullable="false" />
+          <Property Name="Data" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Data_rozpoczecia" Type="DateTime" Precision="0" />
+          <Property Name="Data_zakonczenia" Type="DateTime" Precision="0" />
+          <Property Name="Czy_pracuje" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__praca__Id_pracow__04E4BC85" FromRole="praca" ToRole="users" />
+        </EntityType>
+        <Association Name="FK__informacj__Id_pr__0F624AF8">
           <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
-          <End Type="baza_projektModel.zarobki" Role="zarobki" Multiplicity="0..1" />
+          <End Type="baza_projektModel.informacje_personalne" Role="informacje_personalne" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="users">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="zarobki">
+            <Dependent Role="informacje_personalne">
+              <PropertyRef Name="Id_pracownika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__praca__Id_pracow__04E4BC85">
+          <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
+          <End Type="baza_projektModel.praca" Role="praca" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="praca">
               <PropertyRef Name="Id_pracownika" />
             </Dependent>
           </ReferentialConstraint>
@@ -320,17 +330,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="praca">
-            <EntityTypeMapping TypeName="baza_projektModel.praca">
-              <MappingFragment StoreEntitySet="praca">
-                <ScalarProperty Name="Czy_pracuje" ColumnName="Czy_pracuje" />
-                <ScalarProperty Name="Data_zakonczenia" ColumnName="Data_zakonczenia" />
-                <ScalarProperty Name="Data_rozpoczecia" ColumnName="Data_rozpoczecia" />
-                <ScalarProperty Name="Data" ColumnName="Data" />
-                <ScalarProperty Name="Id_pracownika" ColumnName="Id_pracownika" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="wiadomosci">
             <EntityTypeMapping TypeName="baza_projektModel.wiadomosci">
               <MappingFragment StoreEntitySet="wiadomosci">
@@ -340,11 +339,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="zarobki">
-            <EntityTypeMapping TypeName="baza_projektModel.zarobki">
-              <MappingFragment StoreEntitySet="zarobki">
-                <ScalarProperty Name="Zarobek" ColumnName="Zarobek" />
+          <EntitySetMapping Name="informacje_personalne">
+            <EntityTypeMapping TypeName="baza_projektModel.informacje_personalne">
+              <MappingFragment StoreEntitySet="informacje_personalne">
+                <ScalarProperty Name="Data_zatrudnienia" ColumnName="Data_zatrudnienia" />
+                <ScalarProperty Name="Dni_urlopowe" ColumnName="Dni_urlopowe" />
+                <ScalarProperty Name="Zarobki" ColumnName="Zarobki" />
+                <ScalarProperty Name="Nazwisko" ColumnName="Nazwisko" />
+                <ScalarProperty Name="Imie" ColumnName="Imie" />
                 <ScalarProperty Name="Id_pracownika" ColumnName="Id_pracownika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="praca">
+            <EntityTypeMapping TypeName="baza_projektModel.praca">
+              <MappingFragment StoreEntitySet="praca">
+                <ScalarProperty Name="Czy_pracuje" ColumnName="Czy_pracuje" />
+                <ScalarProperty Name="Data_zakonczenia" ColumnName="Data_zakonczenia" />
+                <ScalarProperty Name="Data_rozpoczecia" ColumnName="Data_rozpoczecia" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Id_pracownika" ColumnName="Id_pracownika" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

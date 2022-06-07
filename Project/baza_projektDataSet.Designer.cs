@@ -784,6 +784,7 @@ namespace Project {
                 base.Columns.Add(this.columnid_role);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnid_user}, true));
+                this.columnid_user.AutoIncrementSeed = 5;
                 this.columnid_user.AllowDBNull = false;
                 this.columnid_user.Unique = true;
             }

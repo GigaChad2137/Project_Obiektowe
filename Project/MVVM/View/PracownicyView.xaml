@@ -11,7 +11,7 @@
 
             <Label Content="Zarządzanie Pracownikami" Foreground="White" FontSize="25" HorizontalAlignment="Center"></Label>
             <Separator Background="White"></Separator>
-            <DataGrid IsReadOnly="True" x:Name="PracownicyGrid"  Margin="10,10,10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="700" Height="296" Background="#847cb6" SelectionChanged="PracownicyGrid_SelectionChanged">
+            <DataGrid IsReadOnly="True" x:Name="PracownicyGrid"  Margin="10,10,10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="700" Height="283" Background="#847cb6" SelectionChanged="PracownicyGrid_SelectionChanged">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}" >
                         <Setter Property="Background" Value="WhiteSmoke"/>
@@ -23,15 +23,13 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns  >
-                    <DataGridTextColumn   Width="43"  />
-                    <DataGridTextColumn Header="Id pracownika"  Binding="{Binding id_pracownika}" Width="100"  />
-                    <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwa_pracownika}"  Width="100"/>
-                    <DataGridTextColumn Header="Rola "   Binding="{Binding Rola_pracownika}" Width="100"/>
-                    <DataGridTextColumn Header="Zarobki"  Binding="{Binding Zarobki_Pracownika}"  Width="100"/>
+                    <DataGridTextColumn   Width="44"  />
+                    <DataGridTextColumn Header="Nazwa" Binding="{Binding Imie_pracownika}"  Width="100"/>
+                    <DataGridTextColumn Header="Nazwa" Binding="{Binding Nazwisko_pracownika}"  Width="100"/>
+                    <DataGridTextColumn Header="Rola"   Binding="{Binding Rola_pracownika}" Width="100"/>
+                    <DataGridTextColumn Header="Zarobki"  Binding="{Binding Zarobki_pracownika}"  Width="100"/>
                     <DataGridTextColumn Header="Czy Pracuje"   Binding="{Binding Czy_pracuje}" Width="100"/>
-                    <DataGridComboBoxColumn Header="Czy dd"    Width="100">
-                  
-                    </DataGridComboBoxColumn>
+                    <DataGridTextColumn Header="Zarobki"  Binding="{Binding Urlop_pracownika}"  Width="100"/>
                 </DataGrid.Columns>
             </DataGrid>
 

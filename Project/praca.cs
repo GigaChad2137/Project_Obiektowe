@@ -14,11 +14,12 @@ namespace Project
     
     public partial class praca
     {
+        public int id { get; set; }
         public int Id_pracownika { get; set; }
         public System.DateTime Data { get; set; }
         public Nullable<System.DateTime> Data_rozpoczecia { get; set; }
         public Nullable<System.DateTime> Data_zakonczenia { get; set; }
-        public Nullable<bool> Czy_pracuje { get; set; }
+        public string Czy_pracuje { get; set; }
     
         public virtual users users { get; set; }
     }
