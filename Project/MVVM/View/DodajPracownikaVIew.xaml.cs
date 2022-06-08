@@ -53,7 +53,7 @@ namespace Project.MVVM.View
                         }
                         else
                         {
-                            if (reg_user != "" && reg_user.Length > 4)
+                            if (reg_user != "" && reg_user.Length >= 4)
                             {
                                 if (reg_passwd == reg_retype_passwd && reg_passwd != "" && reg_passwd.Length > 4 && reg_passwd.Length < 20 && reg_zarobki > 0 && reg_imie != null && reg_nazwisko != null)
                                 {
@@ -68,11 +68,11 @@ namespace Project.MVVM.View
                                  
                                     if (Register_czy_szef.IsChecked == true)
                                     {
-                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 2 });
+                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 1 });
                                     }
                                     else
                                     {
-                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 1 });
+                                        db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 2 });
                                     }
                                     db.informacje_personalne.Add(new informacje_personalne { Id_pracownika = new_usr.Id, Imie = reg_imie, Nazwisko = reg_nazwisko, Zarobki = reg_zarobki,Dni_urlopowe=30,Data_zatrudnienia= today });
                                     MessageBox.Show("Pracownik dodany");
@@ -81,9 +81,9 @@ namespace Project.MVVM.View
                                 }
                                 else if (reg_passwd == "")
                                 {
-                                    MessageBox.Show("Hasło nie może być puste xd");
+                                    MessageBox.Show("Hasło nie może być puste");
                                 }
-                                else if (reg_passwd.Length <= 4 || reg_passwd.Length > 20)
+                                else if (reg_passwd.Length <= 4 || reg_passwd.Length >= 20)
                                 {
                                     MessageBox.Show("Hasło musi zawierać się miedzy 4 a 20 znaków.");
                                 }
@@ -93,7 +93,7 @@ namespace Project.MVVM.View
                                 }
 
                             }
-                            else if (reg_user.Length < 4 || reg_user.Length > 20)
+                            else if (reg_user.Length <= 4 || reg_user.Length >= 20)
                             {
                                 MessageBox.Show("Użytkownik musi zawierać się miedzy 4 a 20 znaków.");
                             }

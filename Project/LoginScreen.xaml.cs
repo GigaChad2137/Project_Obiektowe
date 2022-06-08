@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,14 +29,14 @@ namespace Project
 
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-           
-            try
+            using (var db = new DBPROJECT())
             {
-                using (var db = new DBPROJECT())
+                using (var contex = db.Database.BeginTransaction())
                 {
-                    if (db.users.Where(c => c.username == txtUsername.Text && c.password == txtPassword.Password).Count() > 0)
+                   
+                    var passwdhashed = GetHashedText(txtPassword.Password);
+                    if (db.users.Where(c => c.username == txtUsername.Text && c.password == passwdhashed).Count() > 0)
                     {
-
                         var id_finder = from c in db.users where c.username == txtUsername.Text select c;
                         var id_checker = id_finder.FirstOrDefault<users>();
                         if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
@@ -45,7 +46,6 @@ namespace Project
                             this.Close();
                         }
                         else
-         
                         {
                             UserMainWindow dashboard = new UserMainWindow();
                             dashboard.Show();
@@ -59,12 +59,7 @@ namespace Project
                 }
 
             }
-            catch(Exception ea)
-            {
-                MessageBox.Show(ea.Message);
-            }
         }
-      
         private string GetHashedText(string inputData)
         {
             byte[] tmpSource;

@@ -46,9 +46,6 @@ namespace Project.MVVM.View
                     foreach (var p in id_finder)
                     {
                         DateTime thisDay = DateTime.Now;
-                        Trace.WriteLine(thisDay);
-                        Trace.WriteLine(p);
-                        Trace.WriteLine(db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0);
                         if (db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0)
                         {
                             var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == thisDay select c;
