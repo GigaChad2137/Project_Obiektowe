@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -43,11 +44,22 @@ namespace Project.MVVM.View
 
         private void Send_msg_Click(object sender, RoutedEventArgs e)
         {
-            string username = (string)Application.Current.Properties["username"];
-            var id_do_kogo = Send_do_kogo.SelectedValue;
+            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+            var id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
             string tresc_wiadomosci = Send_Message.Text;
+            using (var db = new DBPROJECT())
+            {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    db.wiadomosci.Add(new wiadomosci { id_nadawcy = id_currect_user, id_odbiorcy = id_do_kogo, Wiadomosc = tresc_wiadomosci, czy_przeczytane = false });
+                    db.SaveChanges();
+                    contex.Commit();
+                    Send_Message.Text = "";
+                    Send_do_kogo.SelectedValue = -1;
+                }
+            }
 
-            
         }
     }
 }

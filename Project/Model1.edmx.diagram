@@ -15,9 +15,9 @@
         <AssociationConnector Association="baza_projektModel.FK__informacj__Id_pr__0F624AF8" />
         <AssociationConnector Association="baza_projektModel.FK__praca__Id_pracow__04E4BC85" />
         <EntityTypeShape EntityType="baza_projektModel.wiadomosci" Width="1.5" PointX="3" PointY="13" />
-        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_od__2A164134" />
-        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_wy__29221CFB" />
-      </Diagram>
+        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__id_na__3C34F16F" />
+        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__id_od__3D2915A8" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

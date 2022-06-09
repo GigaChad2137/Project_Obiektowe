@@ -48,16 +48,8 @@ namespace Project.MVVM.View
 
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
         {
-            var otherWindow = new LoginScreen();
-          
-
-            // ....
-
-            var text = otherWindow.user.Text;
-            MessageBox.Show(text);
             ChatView dashboard = new ChatView();
             dashboard.Show();
-
         }
         private void Stwórz_Wniosek(object sender, RoutedEventArgs e)
         {

@@ -15,8 +15,8 @@ namespace Project
     public partial class wiadomosci
     {
         public int Id { get; set; }
-        public int Id_wysylajacego { get; set; }
-        public int Id_odbiorcy { get; set; }
+        public int id_nadawcy { get; set; }
+        public int id_odbiorcy { get; set; }
         public string Wiadomosc { get; set; }
         public bool czy_przeczytane { get; set; }
     

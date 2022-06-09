@@ -24,7 +24,7 @@ namespace Project
         {
             
             InitializeComponent();
-            string username = (string)Application.Current.Properties["username"];
+            string username = (string)Application.Current.Properties["currect_user_username"];
             cur_username.Text = $"Witaj {username}!";
         }
     }

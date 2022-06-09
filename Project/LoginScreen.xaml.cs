@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 
+
 namespace Project
 {
     /// <summary>
@@ -41,7 +42,7 @@ namespace Project
                         var id_checker = id_finder.FirstOrDefault<users>();
                         if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
                         {
-                            Application.Current.Properties["username"] = txtUsername.Text;
+                            Application.Current.Properties["currect_user_username"] = txtUsername.Text;
                             Application.Current.Properties["currect_user_id"] = id_checker.Id;
                             MainWindow dashboard = new MainWindow();    
                             dashboard.Show();
@@ -61,10 +62,6 @@ namespace Project
                 }
 
             }
-        }
-        public class currect_user
-        {
-            public string username { get; set; }
         }
         private string GetHashedText(string inputData)
         {
