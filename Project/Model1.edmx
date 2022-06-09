@@ -51,9 +51,11 @@
         </EntityType>
         <EntityType Name="wiadomosci">
           <Key>
-            <PropertyRef Name="Id_pracownika" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id_pracownika" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id_wysylajacego" Type="int" Nullable="false" />
+          <Property Name="Id_odbiorcy" Type="int" Nullable="false" />
           <Property Name="Wiadomosc" Type="varchar(max)" />
           <Property Name="czy_przeczytane" Type="bit" Nullable="false" />
         </EntityType>
@@ -105,15 +107,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__wiadomosc__Id_pr__534D60F1">
+        <Association Name="FK__wiadomosc__Id_od__2A164134">
           <End Role="users" Type="Self.users" Multiplicity="1" />
-          <End Role="wiadomosci" Type="Self.wiadomosci" Multiplicity="0..1" />
+          <End Role="wiadomosci" Type="Self.wiadomosci" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="users">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="wiadomosci">
-              <PropertyRef Name="Id_pracownika" />
+              <PropertyRef Name="Id_odbiorcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__wiadomosc__Id_wy__29221CFB">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="wiadomosci" Type="Self.wiadomosci" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="wiadomosci">
+              <PropertyRef Name="Id_wysylajacego" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -140,7 +154,11 @@
             <End Role="users" EntitySet="users" />
             <End Role="user_roles" EntitySet="user_roles" />
           </AssociationSet>
-          <AssociationSet Name="FK__wiadomosc__Id_pr__534D60F1" Association="Self.FK__wiadomosc__Id_pr__534D60F1">
+          <AssociationSet Name="FK__wiadomosc__Id_od__2A164134" Association="Self.FK__wiadomosc__Id_od__2A164134">
+            <End Role="users" EntitySet="users" />
+            <End Role="wiadomosci" EntitySet="wiadomosci" />
+          </AssociationSet>
+          <AssociationSet Name="FK__wiadomosc__Id_wy__29221CFB" Association="Self.FK__wiadomosc__Id_wy__29221CFB">
             <End Role="users" EntitySet="users" />
             <End Role="wiadomosci" EntitySet="wiadomosci" />
           </AssociationSet>
@@ -174,9 +192,10 @@
           <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="user_roles" Relationship="Self.FK__user_role__id_us__403A8C7D" FromRole="users" ToRole="user_roles" />
-          <NavigationProperty Name="wiadomosci" Relationship="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" FromRole="users" ToRole="wiadomosci" />
           <NavigationProperty Name="informacje_personalne" Relationship="baza_projektModel.FK__informacj__Id_pr__0F624AF8" FromRole="users" ToRole="informacje_personalne" />
           <NavigationProperty Name="praca" Relationship="baza_projektModel.FK__praca__Id_pracow__04E4BC85" FromRole="users" ToRole="praca" />
+          <NavigationProperty Name="wiadomosci" Relationship="baza_projektModel.FK__wiadomosc__Id_od__2A164134" FromRole="users" ToRole="wiadomosci" />
+          <NavigationProperty Name="wiadomosci1" Relationship="baza_projektModel.FK__wiadomosc__Id_wy__29221CFB" FromRole="users" ToRole="wiadomosci" />
         </EntityType>
         <Association Name="FK__user_role__id_ro__412EB0B6">
           <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
@@ -214,11 +233,6 @@
             <End Role="users" EntitySet="users" />
             <End Role="user_roles" EntitySet="user_roles" />
           </AssociationSet>
-          <EntitySet Name="wiadomosci" EntityType="baza_projektModel.wiadomosci" />
-          <AssociationSet Name="FK__wiadomosc__Id_pr__534D60F1" Association="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1">
-            <End Role="users" EntitySet="users" />
-            <End Role="wiadomosci" EntitySet="wiadomosci" />
-          </AssociationSet>
           <EntitySet Name="informacje_personalne" EntityType="baza_projektModel.informacje_personalne" />
           <EntitySet Name="praca" EntityType="baza_projektModel.praca" />
           <AssociationSet Name="FK__informacj__Id_pr__0F624AF8" Association="baza_projektModel.FK__informacj__Id_pr__0F624AF8">
@@ -229,28 +243,16 @@
             <End Role="users" EntitySet="users" />
             <End Role="praca" EntitySet="praca" />
           </AssociationSet>
+          <EntitySet Name="wiadomosci" EntityType="baza_projektModel.wiadomosci" />
+          <AssociationSet Name="FK__wiadomosc__Id_od__2A164134" Association="baza_projektModel.FK__wiadomosc__Id_od__2A164134">
+            <End Role="users" EntitySet="users" />
+            <End Role="wiadomosci" EntitySet="wiadomosci" />
+          </AssociationSet>
+          <AssociationSet Name="FK__wiadomosc__Id_wy__29221CFB" Association="baza_projektModel.FK__wiadomosc__Id_wy__29221CFB">
+            <End Role="users" EntitySet="users" />
+            <End Role="wiadomosci" EntitySet="wiadomosci" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="wiadomosci">
-          <Key>
-            <PropertyRef Name="Id_pracownika" />
-          </Key>
-          <Property Name="Id_pracownika" Type="Int32" Nullable="false" />
-          <Property Name="Wiadomosc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="czy_przeczytane" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" FromRole="wiadomosci" ToRole="users" />
-        </EntityType>
-        <Association Name="FK__wiadomosc__Id_pr__534D60F1">
-          <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
-          <End Type="baza_projektModel.wiadomosci" Role="wiadomosci" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="wiadomosci">
-              <PropertyRef Name="Id_pracownika" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="informacje_personalne">
           <Key>
             <PropertyRef Name="Id_pracownika" />
@@ -299,6 +301,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="wiadomosci">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id_wysylajacego" Type="Int32" Nullable="false" />
+          <Property Name="Id_odbiorcy" Type="Int32" Nullable="false" />
+          <Property Name="Wiadomosc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="czy_przeczytane" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__wiadomosc__Id_od__2A164134" FromRole="wiadomosci" ToRole="users" />
+          <NavigationProperty Name="users1" Relationship="baza_projektModel.FK__wiadomosc__Id_wy__29221CFB" FromRole="wiadomosci" ToRole="users" />
+        </EntityType>
+        <Association Name="FK__wiadomosc__Id_od__2A164134">
+          <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
+          <End Type="baza_projektModel.wiadomosci" Role="wiadomosci" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="wiadomosci">
+              <PropertyRef Name="Id_odbiorcy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__wiadomosc__Id_wy__29221CFB">
+          <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
+          <End Type="baza_projektModel.wiadomosci" Role="wiadomosci" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="wiadomosci">
+              <PropertyRef Name="Id_wysylajacego" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -330,15 +368,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="wiadomosci">
-            <EntityTypeMapping TypeName="baza_projektModel.wiadomosci">
-              <MappingFragment StoreEntitySet="wiadomosci">
-                <ScalarProperty Name="czy_przeczytane" ColumnName="czy_przeczytane" />
-                <ScalarProperty Name="Wiadomosc" ColumnName="Wiadomosc" />
-                <ScalarProperty Name="Id_pracownika" ColumnName="Id_pracownika" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="informacje_personalne">
             <EntityTypeMapping TypeName="baza_projektModel.informacje_personalne">
               <MappingFragment StoreEntitySet="informacje_personalne">
@@ -360,6 +389,17 @@
                 <ScalarProperty Name="Data" ColumnName="Data" />
                 <ScalarProperty Name="Id_pracownika" ColumnName="Id_pracownika" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="wiadomosci">
+            <EntityTypeMapping TypeName="baza_projektModel.wiadomosci">
+              <MappingFragment StoreEntitySet="wiadomosci">
+                <ScalarProperty Name="czy_przeczytane" ColumnName="czy_przeczytane" />
+                <ScalarProperty Name="Wiadomosc" ColumnName="Wiadomosc" />
+                <ScalarProperty Name="Id_odbiorcy" ColumnName="Id_odbiorcy" />
+                <ScalarProperty Name="Id_wysylajacego" ColumnName="Id_wysylajacego" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

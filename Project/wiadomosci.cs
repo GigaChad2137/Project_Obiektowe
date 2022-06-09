@@ -14,10 +14,13 @@ namespace Project
     
     public partial class wiadomosci
     {
-        public int Id_pracownika { get; set; }
+        public int Id { get; set; }
+        public int Id_wysylajacego { get; set; }
+        public int Id_odbiorcy { get; set; }
         public string Wiadomosc { get; set; }
         public bool czy_przeczytane { get; set; }
     
         public virtual users users { get; set; }
+        public virtual users users1 { get; set; }
     }
 }

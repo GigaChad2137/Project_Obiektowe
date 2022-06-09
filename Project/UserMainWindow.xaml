@@ -23,9 +23,7 @@
             </Grid.RowDefinitions>
             <TextBlock Text="Elysian" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins"/>
             <StackPanel Grid.Row="1">
-                <RadioButton Content="Home" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}" IsChecked="True" Command="{Binding HomeViewCommand}"/>
-                <RadioButton Content="Test" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}"  Command="{Binding UserVievCommand}" />
-                <RadioButton Content="teuserst3" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}" />
+
             </StackPanel>
           
             <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding CurrentView}"/>

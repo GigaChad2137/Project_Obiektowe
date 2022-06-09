@@ -20,9 +20,12 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow( )
         {
+            
             InitializeComponent();
+            string username = (string)Application.Current.Properties["username"];
+            cur_username.Text = $"Witaj {username}!";
         }
     }
 }

@@ -41,7 +41,9 @@ namespace Project
                         var id_checker = id_finder.FirstOrDefault<users>();
                         if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
                         {
-                            MainWindow dashboard = new MainWindow();
+                            Application.Current.Properties["username"] = txtUsername.Text;
+                            Application.Current.Properties["currect_user_id"] = id_checker.Id;
+                            MainWindow dashboard = new MainWindow();    
                             dashboard.Show();
                             this.Close();
                         }
@@ -59,6 +61,10 @@ namespace Project
                 }
 
             }
+        }
+        public class currect_user
+        {
+            public string username { get; set; }
         }
         private string GetHashedText(string inputData)
         {

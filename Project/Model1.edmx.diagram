@@ -10,12 +10,13 @@
         <EntityTypeShape EntityType="baza_projektModel.users" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
         <AssociationConnector Association="baza_projektModel.FK__user_role__id_ro__412EB0B6" ManuallyRouted="false" />
         <AssociationConnector Association="baza_projektModel.FK__user_role__id_us__403A8C7D" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="baza_projektModel.wiadomosci" Width="1.5" PointX="3" PointY="3.5" />
-        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_pr__534D60F1" />
         <EntityTypeShape EntityType="baza_projektModel.informacje_personalne" Width="1.5" PointX="3" PointY="9.375" />
         <EntityTypeShape EntityType="baza_projektModel.praca" Width="1.5" PointX="3" PointY="6.375" />
         <AssociationConnector Association="baza_projektModel.FK__informacj__Id_pr__0F624AF8" />
         <AssociationConnector Association="baza_projektModel.FK__praca__Id_pracow__04E4BC85" />
+        <EntityTypeShape EntityType="baza_projektModel.wiadomosci" Width="1.5" PointX="3" PointY="13" />
+        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_od__2A164134" />
+        <AssociationConnector Association="baza_projektModel.FK__wiadomosc__Id_wy__29221CFB" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

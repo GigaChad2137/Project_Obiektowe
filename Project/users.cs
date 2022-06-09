@@ -18,6 +18,8 @@ namespace Project
         public users()
         {
             this.praca = new HashSet<praca>();
+            this.wiadomosci = new HashSet<wiadomosci>();
+            this.wiadomosci1 = new HashSet<wiadomosci>();
         }
     
         public int Id { get; set; }
@@ -25,9 +27,12 @@ namespace Project
         public string password { get; set; }
     
         public virtual user_roles user_roles { get; set; }
-        public virtual wiadomosci wiadomosci { get; set; }
         public virtual informacje_personalne informacje_personalne { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<praca> praca { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<wiadomosci> wiadomosci { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<wiadomosci> wiadomosci1 { get; set; }
     }
 }

@@ -12,17 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 namespace Project.MVVM.View
 {
     /// <summary>
     /// Logika interakcji dla klasy HomeView.xaml
     /// </summary>
+
     public partial class HomeView : UserControl
     {
         public HomeView()
         {
+            
             InitializeComponent();
+            TextBox cur_username = new TextBox();
+       
+
             Pokaz_wiadomosci.DataContext = "todo sprawdz ile nowych wiadomosci";
             Pokaz_wnioski.DataContext = "to do sprawdz ile wnioskow";
             Pokaz_wnioski.DataContext = "to do sprawdz czy pracuje";
@@ -30,8 +34,7 @@ namespace Project.MVVM.View
 
         private void Pokaz_Wiadomosci(object sender, RoutedEventArgs e)
         {
-            ChatView dashboard = new ChatView();
-            dashboard.Show();   
+        
     
 
 
@@ -39,11 +42,21 @@ namespace Project.MVVM.View
 
         private void Pokaz_Wnioski(object sender, RoutedEventArgs e)
         {
+           
             Pokaz_wnioski.DataContext = "todo pokaż wnioski";
         }
 
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
         {
+            var otherWindow = new LoginScreen();
+          
+
+            // ....
+
+            var text = otherWindow.user.Text;
+            MessageBox.Show(text);
+            ChatView dashboard = new ChatView();
+            dashboard.Show();
 
         }
         private void Stwórz_Wniosek(object sender, RoutedEventArgs e)

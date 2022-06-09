@@ -13,10 +13,20 @@
 
             <Label Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"></Label>
             <Separator Background="White"></Separator>
-            <ComboBox Name="comboBox1" Width="220"
-            Text="My Cities"
-            IsEditable="true"
-            IsReadOnly="true"/>
+            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}: {1}">
+                                    <Binding Path="Nazwisko"/>
+                                    <Binding Path="Imie"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Label />
             <TextBox x:Name="Send_Message" Background="WhiteSmoke" Height="307" Foreground="Black" FontSize="18" Margin="102,0,68,0"/>
             <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Zatwierdź"  Width="250" Margin="31,25,0,0" Background="WhiteSmoke"    Foreground="Black" FontSize="18" Height="63"/>
