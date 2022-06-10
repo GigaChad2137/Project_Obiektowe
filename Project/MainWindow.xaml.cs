@@ -26,6 +26,16 @@ namespace Project
             InitializeComponent();
             string username = (string)Application.Current.Properties["currect_user_username"];
             cur_username.Text = $"Witaj {username}!";
+
+        }
+      
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginScreen dashboard = new LoginScreen();
+            dashboard.Show();
+            this.Close();
+
         }
     }
 }

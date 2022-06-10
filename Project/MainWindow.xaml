@@ -12,6 +12,7 @@
     </Window.DataContext>
     <Border Background="#272537" CornerRadius="20">
         <Grid>
+           
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -21,6 +22,7 @@
                 <RowDefinition Height="75"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
+            <Button x:Name="Logout" Height="35" Width="100" Background="#020000" Foreground="White" FontSize="20" Content="Wyloguj" Grid.Column="1" Margin="595,15,25,25" Click="Logout_Click"  />
             <TextBlock Text="E-Pracownik" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins"/>
             <StackPanel Grid.Row="1">
                 <RadioButton Content="Home" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}" IsChecked="True" Command="{Binding HomeViewCommand}"/>
@@ -29,7 +31,7 @@
             </StackPanel>
 
             <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding CurrentView}"/>
-
+                
             <TextBlock x:Name="cur_username" Text="użytkownik" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,489,0,9" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins" RenderTransformOrigin="0.5,1.068" Grid.Row="1"/>
         </Grid>
 

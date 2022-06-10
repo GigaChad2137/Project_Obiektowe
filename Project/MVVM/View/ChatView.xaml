@@ -6,7 +6,7 @@
         xmlns:viewModel="clr-namespace:Project.MVVM.ViewModel"
         xmlns:local="clr-namespace:Project"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000" WindowStyle="SingleBorderWindow"  Background="Transparent" >
+        Title="MainWindow" Height="800" Width="1000" WindowStyle="SingleBorderWindow"  Background="Transparent" >
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -68,18 +68,19 @@
 
         <StackPanel Margin="20" Background="Black">
 
-           
+
 
             <Label Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
             <Separator Background="White"/>
-            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" >
+            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" SelectionChanged="Send_do_kogo_SelectionChanged" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}: {1}">
+                                <MultiBinding StringFormat="{}{0} {1} {2}">
                                     <Binding Path="Nazwisko"/>
                                     <Binding Path="Imie"/>
+                                    <Binding Path="czy_nowa_wiadomosc"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -87,9 +88,19 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Label />
-            <TextBox x:Name="Send_Message" Background="WhiteSmoke" Height="307" Foreground="Black" FontSize="18" Margin="102,0,68,0"/>
-            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="WhiteSmoke"    Foreground="Black" FontSize="18" Height="63"/>
+            <RichTextBox x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="307"  FontSize="15" Margin="102,0,68,0">
+                <RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
+            <Label ></Label>
+            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="95,0,0,0"/>
+            <TextBox x:Name="Send_Message" Background="White" Height="30" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />
           
+            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="White"    Foreground="Black" FontSize="18" Height="63"/>
+
         </StackPanel>
     </Border>
 </Window>
