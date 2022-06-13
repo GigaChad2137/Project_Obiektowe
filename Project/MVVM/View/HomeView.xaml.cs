@@ -83,8 +83,9 @@ namespace Project.MVVM.View
 
         private void Pokaz_Wnioski(object sender, RoutedEventArgs e)
         {
-           
-            Pokaz_wnioski.DataContext = "todo pokaż wnioski";
+
+            WnioskiVIew dashboard = new WnioskiVIew();
+            dashboard.Show();
         }
 
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)

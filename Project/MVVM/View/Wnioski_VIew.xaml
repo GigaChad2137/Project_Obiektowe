@@ -70,8 +70,9 @@
 
 
 
-            <Label Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+            <Label Content="Wyślij Wniosek" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
             <Separator Background="White"/>
+            
             <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" SelectionChanged="Send_do_kogo_SelectionChanged" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -88,18 +89,38 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Label />
-            <RichTextBox x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="307"  FontSize="15" Margin="102,0,68,0">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0"/>
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
+            
             <Label ></Label>
-            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="95,0,0,0"/>
-            <TextBox x:Name="Send_Message" Background="White" Height="30" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />
-          
-            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="White"    Foreground="Black" FontSize="18" Height="63"/>
+            <Label x:Name="Data_Start1"  Content="Data Rozpoczęcia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center"/>
+            <DatePicker x:Name="Data_Start" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="IsReadOnly" Value="True"/>
+                        <Setter Property="Text" Value=" "/>
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
+            <Label x:Name="Data_koniecl"  Content="Data Zakończenia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center"/>
+            <DatePicker x:Name="Data_koniec" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="IsReadOnly" Value="True"/>
+                        <Setter Property="Text" Value=" "/>
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
+            <Label  Content="Kwota:" x:Name="kwotal" Visibility="Hidden" Foreground="Wheat" Margin="378,0"/>
+            <TextBox x:Name="kwota" Background="White" Height="30" Visibility="Hidden" Foreground="Black" Width="150"  FontSize="18" HorizontalAlignment="Center" />
+            <Label  Content="Notka:" Foreground="Wheat" Margin="99,0"/>
+         
+            <TextBox x:Name="Notka" Background="White" Height="100" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />
+            <Button x:Name="Send_wniosek" Click="Send_wniosek_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="White"    Foreground="Black" FontSize="18" Height="63"/>
 
         </StackPanel>
     </Border>

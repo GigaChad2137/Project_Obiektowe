@@ -25,38 +25,34 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             BindUserlist();
+            kwotal.Visibility = Visibility.Visible;
+            Data_Start1.Visibility = Visibility.Hidden;
+            Data_Start.Visibility = Visibility.Hidden;
+            Data_koniecl.Visibility = Visibility.Hidden;
+            Data_koniec.Visibility = Visibility.Hidden;
+           // Send_Message.Visibility = Visibility.Hidden;
         }
 
-       public  List<Czat> user = new List<Czat>();
+
+        public List<wnioski> wniosek { get; set; }
         private void BindUserlist()
         {
-            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                    var imiona = (from users in db.users
-                                join informacje_personalne in db.informacje_personalne
-                                on users.Id equals informacje_personalne.Id_pracownika
-                                select new
-                                {
-                                    informacje_personalne.Id_pracownika,
-                                    informacje_personalne.Imie,
-                                    informacje_personalne.Nazwisko,
-                             
-                                }).ToList();
-                    var czy_nowa_wiadomosc = db.wiadomosci.OrderByDescending(u => u.Id);
-                    DataContext = user;
+                    var item = db.wnioski.ToList();
+                    wniosek = item;
+                    DataContext = wniosek;
                 }
             }
         }
-
-        private void Send_msg_Click(object sender, RoutedEventArgs e)
+        private void Send_wniosek_Click(object sender, RoutedEventArgs e)
         {
             int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
             string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
             int id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            string tresc_wiadomosci = Send_Message.Text;
+            string tresc_wiadomosci = Notka.Text;
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
@@ -67,8 +63,7 @@ namespace Project.MVVM.View
                         db.wiadomosci.Add(new wiadomosci { id_nadawcy = id_currect_user, id_odbiorcy = id_do_kogo, Wiadomosc = tresc_wiadomosci, czy_przeczytane = false });
                         db.SaveChanges();
                         contex.Commit();
-                        Send_Message.Text = "";
-                        fast_refresh();
+                        Notka.Text = "";
                         BindUserlist();
                     }
                 }
@@ -76,103 +71,15 @@ namespace Project.MVVM.View
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string typ_wniosku = Send_do_kogo.SelectedIndex.ToString();
+            if (typ_wniosku == "Urlop")
+            {
 
-            fast_refresh();
-            DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(refresh);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
-            dispatcherTimer.Start();
-        }
-        private void refresh(object source, EventArgs e)
-        {
-            int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            Read_messages.Document.Blocks.Clear();
-            using (DBPROJECT db = new DBPROJECT())
-            {
-                using (var contex = db.Database.BeginTransaction())
-                {
-                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                    var czat = (from users in db.users
-                                join wiadomosci in db.wiadomosci
-               on users.Id equals wiadomosci.id_nadawcy
-                                where wiadomosci.id_nadawcy == id_currect_user && wiadomosci.id_odbiorcy == id_do_kogo || wiadomosci.id_nadawcy == id_do_kogo && wiadomosci.id_odbiorcy == id_currect_user
-                                orderby wiadomosci.Id ascending
-                                select new
-                                {
-                                    users.username,
-                                    wiadomosci.Wiadomosc
-                                }).ToList();
-                    int czy_1_linia = 0;
-                    foreach (var wiadomosc in czat)
-                    {
-                        if (wiadomosc.Wiadomosc.Length >= 1)
-                            if(string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
-                            { }
-                            else
-                            {
-                                if (czy_1_linia == 0)
-                                {
-                                    Read_messages.AppendText($"{wiadomosc.username}: {wiadomosc.Wiadomosc}  ");
-                                    czy_1_linia = 1;
-                                }
-                                else
-                                {
-                                    Read_messages.AppendText($"{Environment.NewLine}{wiadomosc.username}: {wiadomosc.Wiadomosc}");
-                                    var converter = new System.Windows.Media.BrushConverter();
-                                }
-                            }
-                        Read_messages.ScrollToEnd();
-                    }
-                }
             }
+
         }
-        public void fast_refresh()
-        {
-            int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            Read_messages.Document.Blocks.Clear();
-            using (DBPROJECT db = new DBPROJECT())
-            {
-                using (var contex = db.Database.BeginTransaction())
-                {
-                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                    var przeczytane = db.wiadomosci.Where(a => a.id_odbiorcy == id_currect_user && a.id_nadawcy == id_do_kogo).ToList();
-                    przeczytane.ForEach(a => a.czy_przeczytane = true);
-                    db.SaveChanges();
-                    var czat = (from users in db.users
-                                join wiadomosci in db.wiadomosci
-               on users.Id equals wiadomosci.id_nadawcy
-                                where wiadomosci.id_nadawcy == id_currect_user && wiadomosci.id_odbiorcy == id_do_kogo || wiadomosci.id_nadawcy == id_do_kogo && wiadomosci.id_odbiorcy == id_currect_user
-                                orderby wiadomosci.Id ascending
-                                select new
-                                {
-                                    users.username,
-                                    wiadomosci.Wiadomosc
-                                }).ToList();
-                    int czy_1_linia = 0;
-                    foreach (var wiadomosc in czat)
-                    {
-                        if (wiadomosc.Wiadomosc.Length >= 1)
-                            if (string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
-                            { }
-                            else
-                            {
-                                if (czy_1_linia == 0)
-                                {
-                                    Read_messages.AppendText($"{wiadomosc.username}: {wiadomosc.Wiadomosc}  ");
-                                    czy_1_linia = 1;
-                                }
-                                else
-                                {
-                                    Read_messages.AppendText($"{Environment.NewLine}{wiadomosc.username}: {wiadomosc.Wiadomosc}");
-                                    var converter = new System.Windows.Media.BrushConverter();
-                                }
-                            }
-                        Read_messages.ScrollToEnd();
-                    }
-                    contex.Commit();
-                }
-            }
-        }
+       
+   
 
 
     }
