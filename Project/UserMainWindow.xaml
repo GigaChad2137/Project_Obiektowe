@@ -1,11 +1,11 @@
 ﻿<Window x:Class="Project.UserMainWindow"
-       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Project.MVVM.ViewModel"
         xmlns:local="clr-namespace:Project"
-        mc:Ignorable="d"
+        mc:Ignorable="d" 
         Title="MainWindow" Height="600" Width="920" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
     <Window.DataContext>
         <viewModel:MainViewModel />
@@ -16,17 +16,19 @@
                 <ColumnDefinition Width="200"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Text="Elysian" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins"/>
+            <Button x:Name="Logout" Height="35" Width="100" Background="#020000" Foreground="White" FontSize="20" Content="Wyloguj" Grid.Column="1" Margin="595,15,25,25" Click="Logout_Click"  />
+            <TextBlock Text="E-Pracownik" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins"/>
             <StackPanel Grid.Row="1">
-
+                <RadioButton Content="Home" Height="50" Foreground="White" FontSize="14" Style="{StaticResource MenuButtonTheme}" IsChecked="True" Command="{Binding HomeViewCommand}"/>
             </StackPanel>
-          
+
             <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding CurrentView}"/>
+
+            <TextBlock x:Name="cur_username" Text="użytkownik" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,489,0,9" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins" RenderTransformOrigin="0.5,1.068" Grid.Row="1"/>
         </Grid>
 
     </Border>

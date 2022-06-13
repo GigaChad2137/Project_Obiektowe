@@ -50,8 +50,6 @@ namespace Project.MVVM.View
                         {
                             var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == thisDay select c;
                             var praca_checker = sprawdzacz_czy_pracuje.FirstOrDefault<praca>();
-
-
                             PracownicyGrid.Items.Add(new Pracownicy
                             {
                                 Imie_pracownika = p.Imie,
@@ -62,14 +60,12 @@ namespace Project.MVVM.View
                                 Urlop_pracownika = p.Dni_urlopu
                             }
                             );
-
                         }
                         else
                         {
                             var pracownik = db.Set<praca>();
                             db.praca.Add(new praca { Id_pracownika = p.Id, Data = default, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Poza Pracą" });
                             db.SaveChanges();
-
                             PracownicyGrid.Items.Add(new Pracownicy
                             {
                                 Imie_pracownika = p.Imie,
@@ -79,7 +75,6 @@ namespace Project.MVVM.View
                                 Czy_pracuje = "Poza Pracą",
                                 Urlop_pracownika = p.Dni_urlopu
                             });
-                            
                         }
                     }
                     contex.Commit();

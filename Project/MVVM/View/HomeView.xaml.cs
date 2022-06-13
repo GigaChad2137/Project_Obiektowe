@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,16 +25,34 @@ namespace Project.MVVM.View
     {
         public HomeView()
         {
-            
             InitializeComponent();
             Pokaz_wiadomosci.DataContext = $"Witaj!";
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosci);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             dispatcherTimer.Start();
-
             Pokaz_wnioski.DataContext = "to do sprawdz ile wnioskow";
-            Pokaz_wnioski.DataContext = "to do sprawdz czy pracuje";
+            using (DBPROJECT db = new DBPROJECT())
+            {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    DateTime thisDay = DateTime.Today;
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                    var czy_pracuje = db.praca.First(x => x.Id_pracownika == id_currect_user && x.Data == thisDay);
+                    if (czy_pracuje.Czy_pracuje == "Pracuje")
+                    {
+                        Czy_pracuje.DataContext = "Zakończ Prace";
+                    }
+                    else if (czy_pracuje.Czy_pracuje == "Urlop")
+                    {
+                        Czy_pracuje.DataContext = "Urlop";
+                    }
+                    else if (czy_pracuje.Czy_pracuje == "Nie Pracuje")
+                    {
+                        Czy_pracuje.DataContext = "Rozpocznij Prace";
+                    }
+                }
+            }
         }
 
         private void Pokaz_Wiadomosci(object sender, RoutedEventArgs e)
@@ -82,15 +101,49 @@ namespace Project.MVVM.View
 
         }
         private void Czy_Pracuje(object sender, RoutedEventArgs e)
-        {
-            if(Convert.ToString(Czy_pracuje.DataContext)=="Zakończ Prace")
+        {   
+            using(DBPROJECT db = new DBPROJECT())
             {
-                Czy_pracuje.DataContext = "Rozpocznij Pracę";
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    DateTime thisDay = DateTime.Today;
+                    Trace.WriteLine(thisDay);
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                    var czy_pracuje = db.praca.First(x => x.Id_pracownika == id_currect_user && x.Data == thisDay);
+                    DateTime Date_with_time = DateTime.Now;
+                    Trace.WriteLine(Date_with_time);
+                    if (czy_pracuje.Czy_pracuje == "Pracuje")
+                    {
+                        Czy_pracuje.DataContext = "Rozpocznij Prace";
+                        czy_pracuje.Data_zakonczenia = Date_with_time;
+                        Trace.WriteLine(" pracuje if");
+                        Trace.WriteLine("Data roz" + czy_pracuje.Data_rozpoczecia);
+                        Trace.WriteLine("Data zak" + czy_pracuje.Data_zakonczenia);
+                        czy_pracuje.Czy_pracuje = "Nie Pracuje";
+                       
+                    }
+                    else if(czy_pracuje.Czy_pracuje == "Urlop")
+                    {
+                        Czy_pracuje.DataContext = "Urlop";
+                    }
+                    
+                    else if(czy_pracuje.Czy_pracuje == "Nie Pracuje")
+                    {
+                        Czy_pracuje.DataContext = "Zakończ Prace";
+                        czy_pracuje.Data_rozpoczecia = Date_with_time;
+                        Trace.WriteLine("Nie pracuje if");
+                        Trace.WriteLine("Data roz"+czy_pracuje.Data_rozpoczecia);
+                        Trace.WriteLine("Data zak"+czy_pracuje.Data_zakonczenia);
+                        czy_pracuje.Czy_pracuje = "Pracuje";
+                  
+
+                    }
+                    db.SaveChanges();
+                    contex.Commit();
+
+                }
             }
-            else
-            {
-                Czy_pracuje.DataContext = "Zakończ Prace";
-            }
+           
             
         }
     }

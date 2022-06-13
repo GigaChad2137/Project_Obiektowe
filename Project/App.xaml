@@ -16,9 +16,6 @@
             <DataTemplate DataType="{x:Type viewModel:DodajPracownikaViewModel}" >
                 <view:DodajPracownikaVIew />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModel:UserViewModel}" >
-                <view:UserWorkView />
-            </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:PracownicyViewModel}" >
                 <view:PracownicyView />
             </DataTemplate>

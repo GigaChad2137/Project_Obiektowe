@@ -29,7 +29,9 @@ namespace Project
         public virtual DbSet<user_roles> user_roles { get; set; }
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<informacje_personalne> informacje_personalne { get; set; }
-        public virtual DbSet<praca> praca { get; set; }
         public virtual DbSet<wiadomosci> wiadomosci { get; set; }
+        public virtual DbSet<praca> praca { get; set; }
+        public virtual DbSet<user_wnioski> user_wnioski { get; set; }
+        public virtual DbSet<wnioski> wnioski { get; set; }
     }
 }
