@@ -114,6 +114,9 @@
     <Compile Include="MVVM\ViewModel\UserMainModel.cs" />
     <Compile Include="MVVM\ViewModel\UserViewModel.cs" />
     <Compile Include="MVVM\ViewModel\WnioskiViewModel.cs" />
+    <Compile Include="MVVM\View\WnioskiViewAdmin.xaml.cs">
+      <DependentUpon>WnioskiViewAdmin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\Wnioski_VIew.xaml.cs">
       <DependentUpon>Wnioski_VIew.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\View\WnioskiViewAdmin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MVVM\View\Wnioski_VIew.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

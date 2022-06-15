@@ -17,10 +17,10 @@
         <AssociationConnector Association="baza_projektModel.FK__wiadomosc__id_od__3D2915A8" />
         <EntityTypeShape EntityType="baza_projektModel.praca" Width="1.5" PointX="1.25" PointY="1.875" />
         <AssociationConnector Association="baza_projektModel.FK__praca__Id_pracow__04E4BC85" />
-        <EntityTypeShape EntityType="baza_projektModel.user_wnioski" Width="1.5" PointX="6.125" PointY="3.75" />
         <EntityTypeShape EntityType="baza_projektModel.wnioski" Width="1.5" PointX="3.125" PointY="5" />
-        <AssociationConnector Association="baza_projektModel.FK__user_wnio__id_pr__51300E55" />
-        <AssociationConnector Association="baza_projektModel.FK__user_wnio__id_wn__5224328E" />
+        <EntityTypeShape EntityType="baza_projektModel.user_wnioski" Width="1.5" PointX="13.5" PointY="2.125" />
+        <AssociationConnector Association="baza_projektModel.FK__user_wnio__id_pr__625A9A57" />
+        <AssociationConnector Association="baza_projektModel.FK__user_wnio__id_wn__634EBE90" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -51,6 +51,7 @@
           <Property Name="Data_rozpoczecia" Type="date" Nullable="false" />
           <Property Name="Data_zakonczenia" Type="date" Nullable="false" />
           <Property Name="Notka" Type="varchar(max)" />
+          <Property Name="kwota" Type="int" />
           <Property Name="Status_Wniosku" Type="bit" />
         </EntityType>
         <EntityType Name="users">
@@ -126,7 +127,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_wnio__id_pr__51300E55">
+        <Association Name="FK__user_wnio__id_pr__625A9A57">
           <End Role="users" Type="Self.users" Multiplicity="1" />
           <End Role="user_wnioski" Type="Self.user_wnioski" Multiplicity="*" />
           <ReferentialConstraint>
@@ -138,7 +139,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_wnio__id_wn__5224328E">
+        <Association Name="FK__user_wnio__id_wn__634EBE90">
           <End Role="wnioski" Type="Self.wnioski" Multiplicity="1" />
           <End Role="user_wnioski" Type="Self.user_wnioski" Multiplicity="*" />
           <ReferentialConstraint>
@@ -199,11 +200,11 @@
             <End Role="users" EntitySet="users" />
             <End Role="user_roles" EntitySet="user_roles" />
           </AssociationSet>
-          <AssociationSet Name="FK__user_wnio__id_pr__51300E55" Association="Self.FK__user_wnio__id_pr__51300E55">
+          <AssociationSet Name="FK__user_wnio__id_pr__625A9A57" Association="Self.FK__user_wnio__id_pr__625A9A57">
             <End Role="users" EntitySet="users" />
             <End Role="user_wnioski" EntitySet="user_wnioski" />
           </AssociationSet>
-          <AssociationSet Name="FK__user_wnio__id_wn__5224328E" Association="Self.FK__user_wnio__id_wn__5224328E">
+          <AssociationSet Name="FK__user_wnio__id_wn__634EBE90" Association="Self.FK__user_wnio__id_wn__634EBE90">
             <End Role="wnioski" EntitySet="wnioski" />
             <End Role="user_wnioski" EntitySet="user_wnioski" />
           </AssociationSet>
@@ -249,7 +250,7 @@
           <NavigationProperty Name="wiadomosci" Relationship="baza_projektModel.FK__wiadomosc__id_na__3C34F16F" FromRole="users" ToRole="wiadomosci" />
           <NavigationProperty Name="wiadomosci1" Relationship="baza_projektModel.FK__wiadomosc__id_od__3D2915A8" FromRole="users" ToRole="wiadomosci" />
           <NavigationProperty Name="praca" Relationship="baza_projektModel.FK__praca__Id_pracow__04E4BC85" FromRole="users" ToRole="praca" />
-          <NavigationProperty Name="user_wnioski" Relationship="baza_projektModel.FK__user_wnio__id_pr__51300E55" FromRole="users" ToRole="user_wnioski" />
+          <NavigationProperty Name="user_wnioski" Relationship="baza_projektModel.FK__user_wnio__id_pr__625A9A57" FromRole="users" ToRole="user_wnioski" />
           </EntityType>
         <Association Name="FK__user_role__id_ro__412EB0B6">
           <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
@@ -306,13 +307,13 @@
             <End Role="users" EntitySet="users" />
             <End Role="praca" EntitySet="praca" />
           </AssociationSet>
-          <EntitySet Name="user_wnioski" EntityType="baza_projektModel.user_wnioski" />
           <EntitySet Name="wnioski" EntityType="baza_projektModel.wnioski" />
-          <AssociationSet Name="FK__user_wnio__id_pr__51300E55" Association="baza_projektModel.FK__user_wnio__id_pr__51300E55">
+          <EntitySet Name="user_wnioski" EntityType="baza_projektModel.user_wnioski" />
+          <AssociationSet Name="FK__user_wnio__id_pr__625A9A57" Association="baza_projektModel.FK__user_wnio__id_pr__625A9A57">
             <End Role="users" EntitySet="users" />
             <End Role="user_wnioski" EntitySet="user_wnioski" />
           </AssociationSet>
-          <AssociationSet Name="FK__user_wnio__id_wn__5224328E" Association="baza_projektModel.FK__user_wnio__id_wn__5224328E">
+          <AssociationSet Name="FK__user_wnio__id_wn__634EBE90" Association="baza_projektModel.FK__user_wnio__id_wn__634EBE90">
             <End Role="wnioski" EntitySet="wnioski" />
             <End Role="user_wnioski" EntitySet="user_wnioski" />
           </AssociationSet>
@@ -401,6 +402,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="wnioski">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="typ_wniosku" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="user_wnioski" Relationship="baza_projektModel.FK__user_wnio__id_wn__634EBE90" FromRole="wnioski" ToRole="user_wnioski" />
+        </EntityType>
         <EntityType Name="user_wnioski">
           <Key>
             <PropertyRef Name="Id" />
@@ -411,19 +420,12 @@
           <Property Name="Data_rozpoczecia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Data_zakonczenia" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Notka" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="kwota" Type="Int32" />
           <Property Name="Status_Wniosku" Type="Boolean" />
-          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__user_wnio__id_pr__51300E55" FromRole="user_wnioski" ToRole="users" />
-          <NavigationProperty Name="wnioski" Relationship="baza_projektModel.FK__user_wnio__id_wn__5224328E" FromRole="user_wnioski" ToRole="wnioski" />
+          <NavigationProperty Name="users" Relationship="baza_projektModel.FK__user_wnio__id_pr__625A9A57" FromRole="user_wnioski" ToRole="users" />
+          <NavigationProperty Name="wnioski" Relationship="baza_projektModel.FK__user_wnio__id_wn__634EBE90" FromRole="user_wnioski" ToRole="wnioski" />
         </EntityType>
-        <EntityType Name="wnioski">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="typ_wniosku" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="user_wnioski" Relationship="baza_projektModel.FK__user_wnio__id_wn__5224328E" FromRole="wnioski" ToRole="user_wnioski" />
-        </EntityType>
-        <Association Name="FK__user_wnio__id_pr__51300E55">
+        <Association Name="FK__user_wnio__id_pr__625A9A57">
           <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
           <End Type="baza_projektModel.user_wnioski" Role="user_wnioski" Multiplicity="*" />
           <ReferentialConstraint>
@@ -435,7 +437,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__user_wnio__id_wn__5224328E">
+        <Association Name="FK__user_wnio__id_wn__634EBE90">
           <End Type="baza_projektModel.wnioski" Role="wnioski" Multiplicity="1" />
           <End Type="baza_projektModel.user_wnioski" Role="user_wnioski" Multiplicity="*" />
           <ReferentialConstraint>
@@ -513,24 +515,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="wnioski">
+            <EntityTypeMapping TypeName="baza_projektModel.wnioski">
+              <MappingFragment StoreEntitySet="wnioski">
+                <ScalarProperty Name="typ_wniosku" ColumnName="typ_wniosku" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="user_wnioski">
             <EntityTypeMapping TypeName="baza_projektModel.user_wnioski">
               <MappingFragment StoreEntitySet="user_wnioski">
                 <ScalarProperty Name="Status_Wniosku" ColumnName="Status_Wniosku" />
+                <ScalarProperty Name="kwota" ColumnName="kwota" />
                 <ScalarProperty Name="Notka" ColumnName="Notka" />
                 <ScalarProperty Name="Data_zakonczenia" ColumnName="Data_zakonczenia" />
                 <ScalarProperty Name="Data_rozpoczecia" ColumnName="Data_rozpoczecia" />
                 <ScalarProperty Name="id_wniosku" ColumnName="id_wniosku" />
                 <ScalarProperty Name="id_pracownika" ColumnName="id_pracownika" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="wnioski">
-            <EntityTypeMapping TypeName="baza_projektModel.wnioski">
-              <MappingFragment StoreEntitySet="wnioski">
-                <ScalarProperty Name="typ_wniosku" ColumnName="typ_wniosku" />
-                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

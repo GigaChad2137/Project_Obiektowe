@@ -25,11 +25,8 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             BindUserlist();
-            kwotal.Visibility = Visibility.Visible;
-            Data_Start1.Visibility = Visibility.Hidden;
-            Data_Start.Visibility = Visibility.Hidden;
-            Data_koniecl.Visibility = Visibility.Hidden;
-            Data_koniec.Visibility = Visibility.Hidden;
+           
+           
            // Send_Message.Visibility = Visibility.Hidden;
         }
 
@@ -43,7 +40,10 @@ namespace Project.MVVM.View
                 {
                     var item = db.wnioski.ToList();
                     wniosek = item;
-                    DataContext = wniosek;
+                    //       DataContext = wniosek;
+                    Send_do_kogo.ItemsSource = wniosek;
+                    Send_do_kogo.DisplayMemberPath = "typ_wniosku";
+                    Send_do_kogo.SelectedValuePath = "id";
                 }
             }
         }
@@ -57,33 +57,56 @@ namespace Project.MVVM.View
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                    if (string.IsNullOrWhiteSpace(tresc_wiadomosci) || tresc_wiadomosci.Length < 1) { }
-                    else
-                    {
-                        db.wiadomosci.Add(new wiadomosci { id_nadawcy = id_currect_user, id_odbiorcy = id_do_kogo, Wiadomosc = tresc_wiadomosci, czy_przeczytane = false });
-                        db.SaveChanges();
-                        contex.Commit();
-                        Notka.Text = "";
-                        BindUserlist();
-                    }
+                    int typ_wniosku = (int)Send_do_kogo.SelectedValue;
+                    var data_start = Data_Start.SelectedDate.Value.Date;
+                    var data_end = Data_koniec.SelectedDate.Value.Date;
+                    string notka = Notka.Text;
+                    db.user_wnioski.Add(new user_wnioski { id_pracownika= id_currect_user,id_wniosku=typ_wniosku,Data_rozpoczecia= data_start,Data_zakonczenia=data_end,Notka=notka });
+                    db.SaveChanges();
+                    contex.Commit();
+                    Notka.Text = "";
                 }
             }
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string typ_wniosku = Send_do_kogo.SelectedIndex.ToString();
-            if (typ_wniosku == "Urlop")
+            int typ_wniosku = (int)Send_do_kogo.SelectedValue;
+            Trace.WriteLine(typ_wniosku);
+            using (var db = new DBPROJECT())
             {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    var testow = db.wnioski.First(x => x.id == typ_wniosku);
+                    if (testow.typ_wniosku == "Urlop")
+                    {
+                        Data_Start1.Visibility = Visibility.Visible;
+                        Data_Start.Visibility = Visibility.Visible;
+                        Data_koniecl.Visibility = Visibility.Visible;
+                        Data_koniec.Visibility = Visibility.Visible;
 
+                    }
+                    else if (testow.typ_wniosku == "L4")
+                    {
+                        Data_Start1.Visibility = Visibility.Visible;
+                        Data_Start.Visibility = Visibility.Visible;
+                        Data_koniecl.Visibility = Visibility.Visible;
+                        Data_koniec.Visibility = Visibility.Visible;
+                        kwotal.Visibility = Visibility.Hidden;
+                        kwota.Visibility = Visibility.Hidden;
+
+                    }
+                    else if (testow.typ_wniosku == "Wynagrodzenie")
+                    {
+                        kwotal.Visibility = Visibility.Visible;
+                        kwota.Visibility = Visibility.Visible;
+                        Data_Start1.Visibility = Visibility.Hidden;
+                        Data_Start.Visibility = Visibility.Hidden;
+                        Data_koniecl.Visibility = Visibility.Hidden;
+                        Data_koniec.Visibility = Visibility.Hidden;
+
+                    }
+                }
             }
-
         }
-       
-   
-
-
     }
-
-
-
 }

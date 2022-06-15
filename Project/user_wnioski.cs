@@ -20,6 +20,7 @@ namespace Project
         public System.DateTime Data_rozpoczecia { get; set; }
         public System.DateTime Data_zakonczenia { get; set; }
         public string Notka { get; set; }
+        public Nullable<int> kwota { get; set; }
         public Nullable<bool> Status_Wniosku { get; set; }
     
         public virtual users users { get; set; }

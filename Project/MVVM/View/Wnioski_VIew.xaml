@@ -73,20 +73,7 @@
             <Label Content="Wyślij Wniosek" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
             <Separator Background="White"/>
             
-            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" SelectionChanged="Send_do_kogo_SelectionChanged" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} {1} {2}">
-                                    <Binding Path="Nazwisko"/>
-                                    <Binding Path="Imie"/>
-                                    <Binding Path="czy_nowa_wiadomosc"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"   SelectionChanged="Send_do_kogo_SelectionChanged" >
             </ComboBox>
             <Label />
             
