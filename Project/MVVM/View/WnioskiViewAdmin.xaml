@@ -74,6 +74,19 @@
            
             
             <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"   SelectionChanged="Send_do_kogo_SelectionChanged" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1} {2}">
+                                    <Binding Path="nazwisko"/>
+                                    <Binding Path="imie"/>
+                                    <Binding Path="typ_wniosku"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
             <Label></Label>
             <Separator Background="White"/>
@@ -82,11 +95,11 @@
             <Label x:Name="typ_wniosku"  Content="Wniosek Urlopowy" Foreground="Wheat" HorizontalAlignment="Center" FontSize="25"/>
             <Separator Background="White"/>
             <Label></Label>
-            <TextBox x:Name="Notka" Background="White" Width="800" Height="300" Foreground="Black"  FontSize="18"  HorizontalAlignment="Center" />
+            <TextBox x:Name="Notka" IsReadOnly="True" Background="White" Width="800" Height="300" Foreground="Black"  FontSize="18"  HorizontalAlignment="Center" />
             <Label Height="50"></Label>
-            <Button x:Name="Odrzuc_wniosek" Click="Send_wniosek_Click" Content="Odrzuć"  Width="250"  Background="White" Margin="606,0,56,0"   Foreground="Black" FontSize="18" Height="63"/>
+            <Button x:Name="Akceptuj_wniosek" Click="Send_akceptuj_wniosek_Click" Content="Akceptuj"  Width="250"  Background="White" Margin="606,0,56,0"   Foreground="Black" FontSize="18" Height="63"/>
             <Label></Label>
-            <Button x:Name="Akceptuj_wniosek" Click="Send_wniosek_Click" Content="Akceptuj"  Width="250"  Background="White" Margin="606,0,56,0"   Foreground="Black" FontSize="18" Height="63"/>
+            <Button x:Name="Odrzuc_wniosek" Click="Send_odrzuc_wniosek_Click" Content="Odrzuć"  Width="250"  Background="White" Margin="606,0,56,0"   Foreground="Black" FontSize="18" Height="63"/>
         </StackPanel>
     </Border>
 </Window>

@@ -52,13 +52,14 @@ namespace Project
                         Application.Current.Properties["currect_user_id"] = id_checker.Id;
                         if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
                         {
-                           
+                            Application.Current.Properties["currect_user_admin"] = true;
                             MainWindow dashboard = new MainWindow();    
                             dashboard.Show();
                             this.Close();
                         }
                         else
                         {
+                            Application.Current.Properties["currect_user_admin"] = false;
                             UserMainWindow dashboard = new UserMainWindow();
                             dashboard.Show();
                             this.Close();

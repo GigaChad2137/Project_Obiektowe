@@ -31,7 +31,7 @@ namespace Project.MVVM.View
         }
 
 
-        public List<Rozpatrz_wnioski> rozpatrz_wnioski { get; set; }
+        public List<Rozpatrz_wnioski> rozpatrz_wnioski = new List<Rozpatrz_wnioski>();
         private void BindUserlist()
         {
             using (var db = new DBPROJECT())
@@ -43,6 +43,7 @@ namespace Project.MVVM.View
                                   on users.Id equals informacje_personalne.Id_pracownika
                                   join user_wnioski in db.user_wnioski on users.Id equals user_wnioski.id_pracownika
                                   join wnioski in db.wnioski on user_wnioski.id_wniosku equals wnioski.id
+                                  where user_wnioski.Status_Wniosku == null
                                   select new
                                   {
                                      user_wnioski.Id,
@@ -55,42 +56,97 @@ namespace Project.MVVM.View
                                     user_wnioski.Notka,
                                     user_wnioski.kwota
                                   }).ToList();
-                 
-                    rozpatrz_wnioski = wnioski_do_rozpatrzenia;
+
+                  
+                    foreach (var wniosek in wnioski_do_rozpatrzenia)
+                    {
+                        rozpatrz_wnioski.Add(new Rozpatrz_wnioski { id_wniosku = wniosek.Id, id_pracownika = wniosek.id_pracownika, typ_wniosku = wniosek.typ_wniosku, imie = wniosek.Imie, nazwisko = wniosek.Nazwisko, data_start = wniosek.Data_rozpoczecia, data_end = wniosek.Data_zakonczenia, notka = wniosek.Notka, kwota = wniosek.kwota });
+                    }
                     DataContext = rozpatrz_wnioski;
                     Send_do_kogo.ItemsSource = rozpatrz_wnioski;
-                    Send_do_kogo.DisplayMemberPath = "typ_wniosku";
-                    Send_do_kogo.SelectedValuePath = "id";
+                    Send_do_kogo.SelectedValuePath = "id_wniosku";
+                 
                 }
             }
         }
-        private void Send_wniosek_Click(object sender, RoutedEventArgs e)
+        private void Send_akceptuj_wniosek_Click(object sender, RoutedEventArgs e)
         {
             int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
             string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
             int id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            string tresc_wiadomosci = Notka.Text;
+            int id_wniosku = (int)Send_do_kogo.SelectedValue;
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-              
-             
+                    var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                    find_wniosek.Status_Wniosku = true;
+                    Send_do_kogo.DataContext = null;
+                    db.SaveChanges();
+                    if (find_wniosek.kwota != null)
+                    {
+
+                    }
+
+                        contex.Commit();
                 }
             }
+            Send_do_kogo.SelectedIndex = -1;
+            Send_do_kogo.ItemsSource = null;
+            rozpatrz_wnioski.Clear();
+            BindUserlist();
+            Send_do_kogo.Items.Refresh();
+        }
+        private void Send_odrzuc_wniosek_Click(object sender, RoutedEventArgs e)
+        {
+            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+            int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+            int id_wniosku = (int)Send_do_kogo.SelectedValue;
+            using (var db = new DBPROJECT())
+            {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                    find_wniosek.Status_Wniosku = false;
+                    Notka.Text = "";
+                    db.SaveChanges();
+                    contex.Commit();
+                }
+            }
+            Send_do_kogo.SelectedIndex = -1;
+            Send_do_kogo.ItemsSource = null;
+            rozpatrz_wnioski.Clear();
+            BindUserlist();
+            Send_do_kogo.Items.Refresh();
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int typ_wniosku = (int)Send_do_kogo.SelectedValue;
-            Trace.WriteLine(typ_wniosku);
-            using (var db = new DBPROJECT())
+            if (Send_do_kogo.SelectedValue != null)
             {
-                using (var contex = db.Database.BeginTransaction())
+                int id_wniosku = (int)Send_do_kogo.SelectedValue;
+                Trace.WriteLine(typ_wniosku);
+                using (var db = new DBPROJECT())
                 {
-                  
-                   
+                    using (var contex = db.Database.BeginTransaction())
+                    {
+
+                        var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                        string newline = Environment.NewLine;
+                        if (find_wniosek.kwota != null)
+                        {
+
+                            Notka.Text = $"Kwota proszonej podwyżki: {find_wniosek.kwota} {newline}  {newline}Załączona wiadomość:{newline}{find_wniosek.Notka}";
+                        }
+                        else
+                        {
+                            Notka.Text = $"Zakres nieobecności:  {find_wniosek.Data_rozpoczecia.Date.ToShortDateString()}- {find_wniosek.Data_zakonczenia.Date.ToShortDateString()}{newline}{newline}---------------------------------------------Załączona wiadomość---------------------------------------------{newline}{newline}{find_wniosek.Notka}";
+                        }
+
+                    }
                 }
             }
+            
 
 
            
@@ -111,7 +167,7 @@ namespace Project.MVVM.View
         public  DateTime data_start { get; set; }
         public DateTime data_end { get; set; }
         public string notka { get; set; }
-        public int kwota { get; set; }
+        public Nullable<int> kwota { get; set; }
     }
 
 }

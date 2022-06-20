@@ -83,9 +83,17 @@ namespace Project.MVVM.View
 
         private void Pokaz_Wnioski(object sender, RoutedEventArgs e)
         {
-
-            WnioskiVIew dashboard = new WnioskiVIew();
-            dashboard.Show();
+            if ((bool)Application.Current.Properties["currect_user_admin"] == true)
+            {
+                WnioskiVIewAdmin dashboard = new WnioskiVIewAdmin();
+                dashboard.Show();
+            }
+            else
+            {
+                WnioskiVIew dashboard = new WnioskiVIew();
+                dashboard.Show();
+            }
+           
         }
 
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
@@ -95,6 +103,8 @@ namespace Project.MVVM.View
         }
         private void Stwórz_Wniosek(object sender, RoutedEventArgs e)
         {
+            WnioskiVIew dashboard = new WnioskiVIew();
+            dashboard.Show();
 
         }
         private void Status_Pracy(object sender, RoutedEventArgs e)
