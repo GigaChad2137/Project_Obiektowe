@@ -51,6 +51,10 @@ namespace Project.MVVM.View
                     {
                         Czy_pracuje.DataContext = "Rozpocznij Prace";
                     }
+                    else if (czy_pracuje.Czy_pracuje == "L4")
+                    {
+                        Czy_pracuje.DataContext = "L4";
+                    }
                 }
             }
         }
@@ -133,11 +137,6 @@ namespace Project.MVVM.View
                         czy_pracuje.Czy_pracuje = "Nie Pracuje";
                        
                     }
-                    else if(czy_pracuje.Czy_pracuje == "Urlop")
-                    {
-                        Czy_pracuje.DataContext = "Urlop";
-                    }
-                    
                     else if(czy_pracuje.Czy_pracuje == "Nie Pracuje")
                     {
                         Czy_pracuje.DataContext = "Zakończ Prace";

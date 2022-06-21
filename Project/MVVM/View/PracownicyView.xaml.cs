@@ -23,8 +23,6 @@ namespace Project.MVVM.View
         public PracownicyView()
         {
             InitializeComponent();
-            // Todo: podlaczyc baze danych i zaladowac modele
-
             using (DBPROJECT db = new DBPROJECT())
             {
                 using(var contex = db.Database.BeginTransaction())
@@ -45,10 +43,9 @@ namespace Project.MVVM.View
                                      }).ToList();
                     foreach (var p in id_finder)
                     {
-                        DateTime thisDay = DateTime.Now;
-                        if (db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == thisDay).Count() > 0)
+                        if (db.praca.Where(c => c.Id_pracownika == p.Id && c.Data == DateTime.Today).Count() > 0)
                         {
-                            var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == thisDay select c;
+                            var sprawdzacz_czy_pracuje = from c in db.praca where c.Id_pracownika == p.Id && c.Data == DateTime.Today select c;
                             var praca_checker = sprawdzacz_czy_pracuje.FirstOrDefault<praca>();
                             PracownicyGrid.Items.Add(new Pracownicy
                             {
@@ -64,7 +61,7 @@ namespace Project.MVVM.View
                         else
                         {
                             var pracownik = db.Set<praca>();
-                            db.praca.Add(new praca { Id_pracownika = p.Id, Data = default, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Poza Pracą" });
+                            db.praca.Add(new praca { Id_pracownika = p.Id, Data = DateTime.Today, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Poza Pracą" });
                             db.SaveChanges();
                             PracownicyGrid.Items.Add(new Pracownicy
                             {
@@ -83,16 +80,13 @@ namespace Project.MVVM.View
         }
         public class Pracownicy
         {
-
             public string Imie_pracownika { get; set; }
             public string Nazwisko_pracownika { get; set; }
             public string Rola_pracownika { get; set; }
             public int Zarobki_pracownika { get; set; }
             public string Czy_pracuje { get; set; }
-          
             public int Urlop_pracownika { get; set; }
         }
-
         private void PracownicyGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 

@@ -25,8 +25,6 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             BindUserlist();
-           
-           
            // Send_Message.Visibility = Visibility.Hidden;
         }
 
