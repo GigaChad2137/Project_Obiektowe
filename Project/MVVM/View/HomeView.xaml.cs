@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Notifications.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,6 +28,15 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             Pokaz_wiadomosci.DataContext = $"Witaj!";
+            load_home_content();
+            refresh_nowe_wnioski();
+
+
+
+        }
+
+        private void load_home_content()
+        {
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosci);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
@@ -82,9 +92,53 @@ namespace Project.MVVM.View
                     }
                 }
             }
-          
         }
+        private void refresh_nowe_wnioski()
+        {
 
+            using (DBPROJECT db = new DBPROJECT())
+            {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                    if ((bool)Application.Current.Properties["currect_user_admin"] == true)
+                    {
+                        var przeczytane = db.user_wnioski.Where(a =>a.Status_Wniosku == null).Count();
+                        if (przeczytane == 0)
+                        {
+                            Pokaz_wnioski.DataContext = $"    Brak nowych {Environment.NewLine}      Wniosków";
+                        }
+                        else if(przeczytane ==1)
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowy Wniosek";
+                        }
+                        else
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowe Wnioski";
+                        }
+
+                    }
+                    else
+                    {
+                     
+                        var przeczytane = db.user_wnioski.Where(a => a.id_pracownika == id_currect_user && a.noti_c < 1).Count();
+                        if (przeczytane == 0)
+                        {
+                            Pokaz_wnioski.DataContext = $"Wnioski";
+                        }
+                        else if ( przeczytane == 1)
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowy Status {Environment.NewLine}       Wniosku";
+                        }
+                        else
+                        {
+                            Pokaz_wnioski.DataContext = $"    {przeczytane} Nowe Statusy {Environment.NewLine}        Wniosków";
+                        }
+                    }
+                    
+                }
+            }
+        }
         private void Pokaz_Wnioski(object sender, RoutedEventArgs e)
         {
             if ((bool)Application.Current.Properties["currect_user_admin"] == true)
@@ -94,12 +148,79 @@ namespace Project.MVVM.View
             }
             else
             {
-                WnioskiVIew dashboard = new WnioskiVIew();
-                dashboard.Show();
+                using (DBPROJECT db = new DBPROJECT())
+                {
+                    using (var contex = db.Database.BeginTransaction())
+                    {
+                        int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                        var statusy = db.user_wnioski.Where(x => x.id_pracownika == id_currect_user && x.Status_Wniosku != null && x.noti_c <3).ToList();
+                        var notificationManager = new NotificationManager();
+                        var starytype = NotificationType.Success;
+                        foreach (var status in  statusy)
+                        {
+                            if(status.noti_c < 0)
+                            {
+                                 starytype = NotificationType.Information;
+                            }
+                            var znajdz_status = db.wnioski.Where(x => x.id == status.id_wniosku).First();
+                            if (status.Status_Wniosku == true)
+                            {
+                                if (status.kwota == null)
+                                {
+                                    notificationManager.Show(new NotificationContent
+                                    {
+                                        Title = $"Wniosek o {znajdz_status.typ_wniosku}",
+                                        Message = $"{status.Data_rozpoczecia.ToShortDateString()}- {status.Data_zakonczenia.ToShortDateString()}  {Environment.NewLine}Został zaakceptowany",
+                                        Type = starytype
+                                    });
+                                }
+                                else
+                                {
+                                    notificationManager.Show(new NotificationContent
+                                    {
+                                        Title = $"Wniosek o {znajdz_status.typ_wniosku}",
+                                        Message = $"Nowa kwota wynagrodzenia: {status.kwota}zł  {Environment.NewLine}został zaakceptowany",
+                                        Type = starytype
+                                    });
+                                }
+                            }
+                            if (status.Status_Wniosku == false)
+                            {
+                                if (status.noti_c < 0)
+                                {
+                                    starytype = NotificationType.Information;
+                                }
+                                else
+                                {
+                                    starytype = NotificationType.Error;
+                                }
+                                if (status.kwota == null)
+                                {
+                                    notificationManager.Show(new NotificationContent
+                                    {
+                                        Title = $"Wniosek o {znajdz_status.typ_wniosku}",
+                                        Message = $"{status.Data_rozpoczecia.ToShortDateString()}- {status.Data_zakonczenia.ToShortDateString()}  {Environment.NewLine}został odrzucony",
+                                        Type = starytype
+                                    });
+                                }
+                                else
+                                {
+                                    notificationManager.Show(new NotificationContent
+                                    {
+                                        Title = $"Wniosek o {znajdz_status.typ_wniosku}",
+                                        Message = $"Nowa kwota wynagrodzenia: {status.kwota}zł  {Environment.NewLine}został odrzucony",
+                                        Type = starytype
+                                    });
+                                }
+                            }
+                            status.noti_c = status.noti_c + 1;
+                            db.SaveChanges();
+                        }
+                        contex.Commit();
+                    }
+                }
             }
-           
         }
-
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
         {
             ChatView dashboard = new ChatView();
@@ -113,7 +234,7 @@ namespace Project.MVVM.View
         }
         private void Status_Pracy(object sender, RoutedEventArgs e)
         {
-
+            
         }
         private void Czy_Pracuje(object sender, RoutedEventArgs e)
         {   

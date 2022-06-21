@@ -64,7 +64,7 @@
         </Style>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Text="Discover" Foreground="White" FontSize="28" HorizontalAlignment="Left" Margin="0,0,0,20 " />
+        <TextBlock Text="Panel Główny:" Foreground="White" FontSize="28" HorizontalAlignment="Left" Margin="0,0,0,20 " />
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10 ">
             <Border Width="400" Height="200">
                 <Border.Background>
@@ -97,7 +97,7 @@
                 <Grid>
                     
                     <Button Click="Pokaz_Wnioski" Background="Transparent"  HorizontalAlignment="Center" Padding="0,20,20,20" Height="200" Width="200">
-                        <TextBlock  x:Name="Pokaz_wnioski"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="18" Margin="20,10,10,0"/>
+                        <TextBlock  x:Name="Pokaz_wnioski"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="22"/>
                     </Button>
                 </Grid>
             </Border>

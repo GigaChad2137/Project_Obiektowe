@@ -105,7 +105,7 @@
                 </DatePicker.Resources>
             </DatePicker>
             <Label  Content="Kwota:" x:Name="kwotal" Visibility="Hidden" Foreground="Wheat" Margin="378,0"/>
-            <TextBox x:Name="kwota" Background="White" Height="30" Visibility="Hidden" Foreground="Black" Width="150"  FontSize="18" HorizontalAlignment="Center" />
+            <TextBox x:Name="kwota" Background="White"  PreviewTextInput="NumberValidationTextBox" Height="30" Visibility="Hidden" Foreground="Black" Width="150"  FontSize="18" HorizontalAlignment="Center" />
             <Label  Content="Notka:" Foreground="Wheat" Margin="99,0"/>
          
             <TextBox x:Name="Notka" Background="White" Height="100" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />

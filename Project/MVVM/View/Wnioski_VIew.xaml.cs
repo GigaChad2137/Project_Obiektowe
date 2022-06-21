@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Notifications.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -62,29 +64,38 @@ namespace Project.MVVM.View
                     var testow = db.wnioski.First(x => x.id == typ_wniosku);
                     if (testow.typ_wniosku == "Wynagrodzenie")
                     {
-                        var data_start = Data_Start.SelectedDate.Value.Date;
-                        var data_end = Data_koniec.SelectedDate.Value.Date;
                         string notka = Notka.Text;
-                        db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka });
+                        db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka,kwota=Convert.ToInt32(kwota.Text)});
                         db.SaveChanges();
-
                         Notka.Text = "";
-                     
-
                     }
                     else
                     {
-                        var data_start = Data_Start.SelectedDate.Value.Date;
-                        var data_end = Data_koniec.SelectedDate.Value.Date;
-                        string notka = Notka.Text;
-                        db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = data_start, Data_zakonczenia = data_end, Notka = notka });
-                        db.SaveChanges();
-                      
-                        Notka.Text = "";
-                        Data_Start.SelectedDate = null;
-                        Data_Start.DisplayDate = DateTime.Today;
-                        Data_koniec.SelectedDate = null;
-                        Data_koniec.DisplayDate = DateTime.Today;
+                        if(Data_Start.SelectedDate == null || Data_koniec.SelectedDate == null)
+                        {
+                            var notificationManager = new NotificationManager();
+                            notificationManager.Show(new NotificationContent
+                            {
+                                Title = $"Brak Wymaganego Pola",
+                                Message = $"Upewnij się że Pola z datami są uzupełnione",
+                                Type = NotificationType.Error
+                        });
+                        }
+                        else
+                        {
+                            var data_start = Data_Start.SelectedDate.Value.Date;
+                            var data_end = Data_koniec.SelectedDate.Value.Date;
+                            string notka = Notka.Text;
+                            db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = data_start, Data_zakonczenia = data_end, Notka = notka });
+                            db.SaveChanges();
+                            Notka.Text = "";
+                            Data_Start.SelectedDate = null;
+                            Data_Start.DisplayDate = DateTime.Today;
+                            Data_koniec.SelectedDate = null;
+                            Data_koniec.DisplayDate = DateTime.Today;
+
+                        }
+                       
 
                     }
                     contex.Commit();
@@ -132,6 +143,11 @@ namespace Project.MVVM.View
                     }
                 }
             }
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

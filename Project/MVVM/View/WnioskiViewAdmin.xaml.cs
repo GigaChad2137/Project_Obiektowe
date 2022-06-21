@@ -71,79 +71,89 @@ namespace Project.MVVM.View
         }
         private void Send_akceptuj_wniosek_Click(object sender, RoutedEventArgs e)
         {
-            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
-            int id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            int id_wniosku = (int)Send_do_kogo.SelectedValue;
-            using (var db = new DBPROJECT())
+            if (Send_do_kogo.SelectedValue!= null)
             {
-                using (var contex = db.Database.BeginTransaction())
+                int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+                int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+                int id_wniosku = (int)Send_do_kogo.SelectedValue;
+                using (var db = new DBPROJECT())
                 {
-                    var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
-                    var start = find_wniosek.Data_rozpoczecia;
-                    var end = find_wniosek.Data_zakonczenia;
-                    find_wniosek.Status_Wniosku = true;
-                    Send_do_kogo.DataContext = null;
-                    db.SaveChanges();
-                    Trace.WriteLine(find_wniosek.kwota+" test");
-                    if (find_wniosek.kwota == null)
+                    using (var contex = db.Database.BeginTransaction())
                     {
-                    DateTime[] zakres_nieobecnosci = Enumerable.Range(0, 1 + end.Subtract(start).Days)
-                                         .Select(offset => start.AddDays(offset))
-                                         .ToArray();
-                        var czy_pracuje = db.wnioski.Where(x => x.id == find_wniosek.id_wniosku).First();
-                        Trace.WriteLine(zakres_nieobecnosci.Length);
-                        foreach (var dzien in zakres_nieobecnosci)
+                        var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                        var start = find_wniosek.Data_rozpoczecia;
+                        var end = find_wniosek.Data_zakonczenia;
+                        find_wniosek.Status_Wniosku = true;
+                        Send_do_kogo.DataContext = null;
+                        db.SaveChanges();
+                        Trace.WriteLine(find_wniosek.kwota + " test");
+                        if (find_wniosek.kwota == null)
                         {
-                            var check_date = db.praca.Where(x => x.Id_pracownika == find_wniosek.id_pracownika && x.Data==dzien.Date).FirstOrDefault();
-                            if(check_date != null)
+                            DateTime[] zakres_nieobecnosci = Enumerable.Range(0, 1 + end.Subtract(start).Days)
+                                                 .Select(offset => start.AddDays(offset))
+                                                 .ToArray();
+                            var czy_pracuje = db.wnioski.Where(x => x.id == find_wniosek.id_wniosku).First();
+                            Trace.WriteLine(zakres_nieobecnosci.Length);
+                            foreach (var dzien in zakres_nieobecnosci)
                             {
-                                check_date.Data_rozpoczecia = null;
-                                check_date.Data_zakonczenia = null;
-                                check_date.Czy_pracuje = czy_pracuje.typ_wniosku;
+                                var check_date = db.praca.Where(x => x.Id_pracownika == find_wniosek.id_pracownika && x.Data == dzien.Date).FirstOrDefault();
+                                if (check_date != null)
+                                {
+                                    check_date.Data_rozpoczecia = null;
+                                    check_date.Data_zakonczenia = null;
+                                    check_date.Czy_pracuje = czy_pracuje.typ_wniosku;
+                                    db.SaveChanges();
+                                }
+                                db.praca.Add(new praca { Id_pracownika = find_wniosek.id_pracownika, Data = dzien.Date, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = czy_pracuje.typ_wniosku });
                                 db.SaveChanges();
                             }
-                            db.praca.Add(new praca { Id_pracownika = find_wniosek.id_pracownika, Data = dzien.Date, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = czy_pracuje.typ_wniosku });
+                        }
+                        else
+                        {
+                            var find_user = db.informacje_personalne.Where(x => x.Id_pracownika == find_wniosek.id_pracownika).First();
+                            find_user.Zarobki = Convert.ToInt32(find_wniosek.kwota);
                             db.SaveChanges();
                         }
-                    }
-                    else
-                    {
-                        var find_user = db.informacje_personalne.Where(x => x.Id_pracownika == find_wniosek.id_pracownika).First();
-                        find_user.Zarobki = Convert.ToInt32(find_wniosek.kwota);
-                        db.SaveChanges();
-                    }
                         contex.Commit();
+                    }
                 }
+                Notka.Text = "";
+                Send_do_kogo.SelectedIndex = -1;
+                Send_do_kogo.ItemsSource = null;
+                rozpatrz_wnioski.Clear();
+                BindUserlist();
+                Send_do_kogo.Items.Refresh();
             }
-            Send_do_kogo.SelectedIndex = -1;
-            Send_do_kogo.ItemsSource = null;
-            rozpatrz_wnioski.Clear();
-            BindUserlist();
-            Send_do_kogo.Items.Refresh();
+                
         }
         private void Send_odrzuc_wniosek_Click(object sender, RoutedEventArgs e)
         {
-            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
-            int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            int id_wniosku = (int)Send_do_kogo.SelectedValue;
-            using (var db = new DBPROJECT())
+            if(Send_do_kogo.SelectedValue != null)
             {
-                using (var contex = db.Database.BeginTransaction())
+                int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+                int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+                int id_wniosku = (int)Send_do_kogo.SelectedValue;
+                using (var db = new DBPROJECT())
                 {
-                    var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
-                    find_wniosek.Status_Wniosku = false;
-                    Notka.Text = "";
-                    db.SaveChanges();
-                    contex.Commit();
+                    using (var contex = db.Database.BeginTransaction())
+                    {
+                        var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                        find_wniosek.Status_Wniosku = false;
+                        Notka.Text = "";
+                        db.SaveChanges();
+                        contex.Commit();
+                    }
                 }
+                Send_do_kogo.SelectedIndex = -1;
+                Send_do_kogo.ItemsSource = null;
+                rozpatrz_wnioski.Clear();
+                BindUserlist();
+                Send_do_kogo.Items.Refresh();
+
             }
-            Send_do_kogo.SelectedIndex = -1;
-            Send_do_kogo.ItemsSource = null;
-            rozpatrz_wnioski.Clear();
-            BindUserlist();
-            Send_do_kogo.Items.Refresh();
+            
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -53,6 +53,7 @@
           <Property Name="Notka" Type="varchar(max)" />
           <Property Name="kwota" Type="int" />
           <Property Name="Status_Wniosku" Type="bit" />
+          <Property Name="noti_c" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="users">
           <Key>
@@ -424,6 +425,7 @@
           <Property Name="Status_Wniosku" Type="Boolean" />
           <NavigationProperty Name="users" Relationship="baza_projektModel.FK__user_wnio__id_pr__625A9A57" FromRole="user_wnioski" ToRole="users" />
           <NavigationProperty Name="wnioski" Relationship="baza_projektModel.FK__user_wnio__id_wn__634EBE90" FromRole="user_wnioski" ToRole="wnioski" />
+          <Property Name="noti_c" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK__user_wnio__id_pr__625A9A57">
           <End Type="baza_projektModel.users" Role="users" Multiplicity="1" />
@@ -526,6 +528,7 @@
           <EntitySetMapping Name="user_wnioski">
             <EntityTypeMapping TypeName="baza_projektModel.user_wnioski">
               <MappingFragment StoreEntitySet="user_wnioski">
+                <ScalarProperty Name="noti_c" ColumnName="noti_c" />
                 <ScalarProperty Name="Status_Wniosku" ColumnName="Status_Wniosku" />
                 <ScalarProperty Name="kwota" ColumnName="kwota" />
                 <ScalarProperty Name="Notka" ColumnName="Notka" />

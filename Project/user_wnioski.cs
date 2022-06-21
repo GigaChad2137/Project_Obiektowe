@@ -22,6 +22,7 @@ namespace Project
         public string Notka { get; set; }
         public Nullable<int> kwota { get; set; }
         public Nullable<bool> Status_Wniosku { get; set; }
+        public int noti_c { get; set; }
     
         public virtual users users { get; set; }
         public virtual wnioski wnioski { get; set; }
