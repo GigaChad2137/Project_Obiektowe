@@ -7,14 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Drawing;
+
 using System.Windows.Threading;
+
 
 namespace Project.MVVM.View
 {
@@ -24,6 +21,8 @@ namespace Project.MVVM.View
 
     public partial class HomeView : UserControl
     {
+       
+
         public HomeView()
         {
             InitializeComponent();
@@ -158,7 +157,7 @@ namespace Project.MVVM.View
                         var starytype = NotificationType.Success;
                         foreach (var status in  statusy)
                         {
-                            if(status.noti_c < 0)
+                            if(status.noti_c > 0)
                             {
                                  starytype = NotificationType.Information;
                             }
@@ -186,7 +185,7 @@ namespace Project.MVVM.View
                             }
                             if (status.Status_Wniosku == false)
                             {
-                                if (status.noti_c < 0)
+                                if (status.noti_c > 0)
                                 {
                                     starytype = NotificationType.Information;
                                 }
@@ -234,7 +233,9 @@ namespace Project.MVVM.View
         }
         private void Status_Pracy(object sender, RoutedEventArgs e)
         {
-            
+
+            WorkRaportPdf dashboard = new WorkRaportPdf();
+            dashboard.Show();
         }
         private void Czy_Pracuje(object sender, RoutedEventArgs e)
         {   
