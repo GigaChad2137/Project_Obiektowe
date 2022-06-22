@@ -21,7 +21,7 @@
 
                 <StackPanel Orientation="Horizontal" Margin="30" Grid.Row="0">
 
-                    <TextBlock Text="INVOICE" VerticalAlignment="Center" FontSize="35" FontWeight="Bold" Foreground="#FFFBE188"/>
+                    <TextBlock Text="Firma S.A" VerticalAlignment="Center" FontSize="35" FontWeight="Bold" Foreground="#FFFBE188"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="20">
                     <Grid HorizontalAlignment="Stretch">
@@ -63,9 +63,11 @@
                         <TextBlock Text="Razem" Grid.Column="4" FontSize="12" FontWeight="ExtraLight" HorizontalAlignment="Center" Margin="67,0,0,0"/>
                     </Grid>
                     <Rectangle Fill="Black" Height="1" Margin="5 2" Opacity="0.5"/>
-                    <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ListViewItem>
-                            <Grid HorizontalAlignment="Stretch" Margin="2" Width="724">
+                    <ListView x:Name="Listviewpdf" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel>
+                                    <Grid HorizontalAlignment="Stretch" Margin="2" Width="724">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="180*"/>
                                     <ColumnDefinition Width="180*"/>
@@ -74,15 +76,16 @@
                                     <ColumnDefinition Width="80*"/>
                                     <ColumnDefinition Width="80*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="24-02-2022" Grid.Column="0" Grid.ColumnSpan="2"/>
-                                <TextBlock Text="11:36:36" Grid.Column="1" HorizontalAlignment="Center" Margin="-19,0,20,0"/>
-                                <TextBlock Text="11:36:36" Grid.Column="2" HorizontalAlignment="Center" Margin="-28,0,33,0"/>
-                                <TextBlock Text="7.46h" Grid.Column="3" HorizontalAlignment="Center" Margin="-34,0,17,0"/>
-
-                                <TextBlock Text="147zł" Grid.Column="5" HorizontalAlignment="Center"  Margin="-9,0,17,0" />
+                                        <TextBlock Text="{Binding Name}" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <TextBlock Text="{Binding czas_start}" Grid.Column="1" HorizontalAlignment="Center" Margin="-19,0,20,0"/>
+                                        <TextBlock Text="{Binding czas_stop}" Grid.Column="2" HorizontalAlignment="Center" Margin="-28,0,33,0"/>
+                                        <TextBlock Text="{Binding godziny}" Grid.Column="3" HorizontalAlignment="Center" Margin="-34,0,17,0"/>
+                                        <TextBlock Text="{Binding kwota}" Grid.Column="5" HorizontalAlignment="Center"  Margin="-9,0,17,0" />
                             </Grid>
-                        </ListViewItem>
-                       
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+
                     </ListView>
                 </StackPanel>
 

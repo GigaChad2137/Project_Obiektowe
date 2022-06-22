@@ -22,6 +22,12 @@ namespace Project.MVVM.View
         public WorkRaportPdf()
         {
             InitializeComponent();
+            List<Pdf_view> items = new List<Pdf_view>();
+            items.Add(new Pdf_view() { Name = "John Doe", czas_start = DateTime.Now,czas_stop=DateTime.Now,godziny="4h",kwota="80zloty" });
+            items.Add(new Pdf_view() { Name = "John Doe", czas_start = DateTime.Now, czas_stop = DateTime.Now, godziny = "4h", kwota = "80zloty" });
+            items.Add(new Pdf_view() { Name = "John Doe", czas_start = DateTime.Now, czas_stop = DateTime.Now, godziny = "4h", kwota = "80zloty" });
+
+            Listviewpdf.ItemsSource = items;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -41,5 +47,14 @@ namespace Project.MVVM.View
             }
 
         }
+    }
+    public class Pdf_view
+    {
+        public string Name { get; set; }
+        public DateTime czas_start { get; set; }
+        public DateTime czas_stop { get; set; }
+        public string godziny { get; set; }
+        public string kwota { get; set; }
+
     }
 }
