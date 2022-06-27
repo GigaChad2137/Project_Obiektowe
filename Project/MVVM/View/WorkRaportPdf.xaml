@@ -12,42 +12,43 @@
             <Button HorizontalAlignment="Right" Margin="10" Click="Button_Click" VerticalAlignment="Top">
                 <materialDesign:PackIcon Kind="Printer"/>
             </Button>
-            <Grid x:Name="print">
+            <Grid x:Name="print" Margin="-10,-45,10,45">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="386*"/>
+                    <ColumnDefinition Width="391*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="120"/>
                     <RowDefinition Height="400"/>
                     <RowDefinition Height="200"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" Margin="30" Grid.Row="0">
-
-                    <TextBlock Text="Firma S.A" VerticalAlignment="Center" FontSize="35" FontWeight="Bold" Foreground="#FFFBE188"/>
+                <StackPanel Orientation="Horizontal" Margin="30" Grid.Row="0" Grid.ColumnSpan="2">
+                    <TextBlock Text="Firma S.A" VerticalAlignment="Center" FontSize="35" FontWeight="Bold" Foreground="#FFFBE188" Margin="0,7,0,10" Width="199" Height="44"/>
                 </StackPanel>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="20">
+                <StackPanel HorizontalAlignment="Stretch" Margin="19,63,21,-99" Grid.RowSpan="3" Grid.ColumnSpan="2">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="143*"/>
+                            <ColumnDefinition Width="226*"/>
+                            <ColumnDefinition Width="131*"/>
+                            <ColumnDefinition Width="237*"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0" Margin="10">
-                            <TextBlock Text="Imie pracownika" FontSize="20" Margin="5"/>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Date Issued:" FontSize="12" Margin="5"/>
-                                <TextBlock Text="Miesiąc Rozliczenia" FontSize="12" Margin="5" FontWeight="DemiBold"/>
+                        <StackPanel Grid.Column="0" Margin="17,20,37,10" Grid.ColumnSpan="2">
+                            <TextBlock x:Name="imie_nazwisko_pracownika"  FontSize="20" Margin="-5,5,5,5"/>
+                            <StackPanel Orientation="Horizontal" Margin="-9,0,0,0">
+                                <TextBlock Text="Rozliczenie za okres" FontSize="12" Margin="5" Width="109"/>
+                                <TextBlock x:Name="Data_rozliczenia" Text="Miesiąc Rozliczenia" FontSize="12" Margin="5" FontWeight="DemiBold" Width="113"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Invoice No:" FontSize="12" Margin="5"/>
-                                <TextBlock Text="0001" FontSize="12" Margin="5" FontWeight="DemiBold"/>
-                            </StackPanel>
+
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Margin="10">
+                        <StackPanel Grid.Column="2" Margin="10" Grid.ColumnSpan="2">
                             <TextBlock Text="Podpis Prezesa:" FontSize="12" Margin="5" HorizontalAlignment="Right"/>
                             <TextBlock Text="....................................." FontSize="12" Margin="5" HorizontalAlignment="Right"/>
                             <TextBlock Text="Pieczątka i Data:" FontSize="12" Margin="5" HorizontalAlignment="Right"/>
                             <TextBlock Text="....................................." FontSize="12" Margin="5" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </Grid>
-
                     <Grid Margin="10 30 10 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -68,20 +69,20 @@
                             <DataTemplate>
                                 <WrapPanel>
                                     <Grid HorizontalAlignment="Stretch" Margin="2" Width="724">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="180*"/>
-                                    <ColumnDefinition Width="180*"/>
-                                    <ColumnDefinition Width="180*"/>
-                                    <ColumnDefinition Width="140*"/>
-                                    <ColumnDefinition Width="80*"/>
-                                    <ColumnDefinition Width="80*"/>
-                                </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Name}" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="180*"/>
+                                            <ColumnDefinition Width="180*"/>
+                                            <ColumnDefinition Width="180*"/>
+                                            <ColumnDefinition Width="140*"/>
+                                            <ColumnDefinition Width="80*"/>
+                                            <ColumnDefinition Width="80*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding data}" Grid.Column="0" Grid.ColumnSpan="2"/>
                                         <TextBlock Text="{Binding czas_start}" Grid.Column="1" HorizontalAlignment="Center" Margin="-19,0,20,0"/>
                                         <TextBlock Text="{Binding czas_stop}" Grid.Column="2" HorizontalAlignment="Center" Margin="-28,0,33,0"/>
                                         <TextBlock Text="{Binding godziny}" Grid.Column="3" HorizontalAlignment="Center" Margin="-34,0,17,0"/>
                                         <TextBlock Text="{Binding kwota}" Grid.Column="5" HorizontalAlignment="Center"  Margin="-9,0,17,0" />
-                            </Grid>
+                                    </Grid>
                                 </WrapPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -89,7 +90,7 @@
                     </ListView>
                 </StackPanel>
 
-                <StackPanel Grid.Row="2" Margin="20 0">
+                <StackPanel Grid.Row="2" Margin="19,250,21,-211" Grid.ColumnSpan="2">
                     <Grid Margin="10 20 10 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
@@ -109,32 +110,31 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <StackPanel Orientation="Horizontal">
-                               
+
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                              
+
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="2012-14-12" FontSize="25" Margin="5"/>
+                            <TextBlock x:Name="Data_stworzenia_pdfa" FontSize="25" Margin="5"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="80 złotych" FontSize="25" Margin="5" HorizontalAlignment="Right" Foreground="#FF62013C" FontWeight="Bold"/>
+                            <TextBlock x:Name="Podsumowanie_wyplaty" FontSize="25" Margin="5" HorizontalAlignment="Right" Foreground="#FF62013C" FontWeight="Bold"/>
                         </StackPanel>
                     </Grid>
-                    <Rectangle Fill="Black" Height="1" Margin="5" Opacity="0.5"/>
-
                     <Grid Margin="0 20" HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Margin="0,-27,0,27">
                             <materialDesign:PackIcon Kind="SackPercent" Foreground="#FF62013C" Width="20" Height="20" Margin="5" VerticalAlignment="Center"/>
                             <TextBlock Text="Firma S.A" VerticalAlignment="Center" FontSize="20" Margin="5" FontWeight="Light"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                             <TextBlock Text="Firma.S.F.A@email.com" VerticalAlignment="Center" FontSize="8" Margin="5" FontWeight="Light"/>
                             <TextBlock Text="48+ 111 111 444" VerticalAlignment="Center" FontSize="8" Margin="5" FontWeight="Light"/>
-                          
+
                         </StackPanel>
                     </Grid>
+                    <Rectangle Fill="Black" Height="1" Margin="5" Opacity="0.5"/>
                 </StackPanel>
             </Grid>
         </Grid>
