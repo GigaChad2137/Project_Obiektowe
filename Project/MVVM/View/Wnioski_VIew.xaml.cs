@@ -51,55 +51,58 @@ namespace Project.MVVM.View
         }
         private void Send_wniosek_Click(object sender, RoutedEventArgs e)
         {
-            int typ_wniosku = (int)Send_do_kogo.SelectedValue;
-            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
-            int id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            string tresc_wiadomosci = Notka.Text;
-            using (var db = new DBPROJECT())
+            if (Send_do_kogo.SelectedValue != null && kwota.Text != "")
             {
-                using (var contex = db.Database.BeginTransaction())
+                int typ_wniosku = (int)Send_do_kogo.SelectedValue;
+                int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+                int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+                string tresc_wiadomosci = Notka.Text;
+                using (var db = new DBPROJECT())
                 {
+                    using (var contex = db.Database.BeginTransaction())
+                    {
 
-                    var testow = db.wnioski.First(x => x.id == typ_wniosku);
-                    if (testow.typ_wniosku == "Wynagrodzenie")
-                    {
-                        string notka = Notka.Text;
-                        db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka,kwota=Convert.ToInt32(kwota.Text)});
-                        db.SaveChanges();
-                        Notka.Text = "";
-                    }
-                    else
-                    {
-                        if(Data_Start.SelectedDate == null || Data_koniec.SelectedDate == null)
+                        var testow = db.wnioski.First(x => x.id == typ_wniosku);
+                        if (testow.typ_wniosku == "Wynagrodzenie")
                         {
-                            var notificationManager = new NotificationManager();
-                            notificationManager.Show(new NotificationContent
-                            {
-                                Title = $"Brak Wymaganego Pola",
-                                Message = $"Upewnij się że Pola z datami są uzupełnione",
-                                Type = NotificationType.Error
-                        });
+                            string notka = Notka.Text;
+                            db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka, kwota = Convert.ToInt32(kwota.Text) });
+                            db.SaveChanges();
+                            Notka.Text = "";
                         }
                         else
                         {
-                            var data_start = Data_Start.SelectedDate.Value.Date;
-                            var data_end = Data_koniec.SelectedDate.Value.Date;
-                            string notka = Notka.Text;
-                            db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = data_start, Data_zakonczenia = data_end, Notka = notka });
-                            db.SaveChanges();
-                            Notka.Text = "";
-                            Data_Start.SelectedDate = null;
-                            Data_Start.DisplayDate = DateTime.Today;
-                            Data_koniec.SelectedDate = null;
-                            Data_koniec.DisplayDate = DateTime.Today;
+                            if (Data_Start.SelectedDate == null || Data_koniec.SelectedDate == null)
+                            {
+                                var notificationManager = new NotificationManager();
+                                notificationManager.Show(new NotificationContent
+                                {
+                                    Title = $"Brak Wymaganego Pola",
+                                    Message = $"Upewnij się że Pola z datami są uzupełnione",
+                                    Type = NotificationType.Error
+                                });
+                            }
+                            else
+                            {
+                                var data_start = Data_Start.SelectedDate.Value.Date;
+                                var data_end = Data_koniec.SelectedDate.Value.Date;
+                                string notka = Notka.Text;
+                                db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = data_start, Data_zakonczenia = data_end, Notka = notka });
+                                db.SaveChanges();
+                                Notka.Text = "";
+                                Data_Start.SelectedDate = null;
+                                Data_Start.DisplayDate = DateTime.Today;
+                                Data_koniec.SelectedDate = null;
+                                Data_koniec.DisplayDate = DateTime.Today;
+
+                            }
+
 
                         }
-                       
+                        contex.Commit();
 
                     }
-                    contex.Commit();
-
                 }
             }
         }
