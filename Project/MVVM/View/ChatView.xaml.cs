@@ -83,23 +83,26 @@ namespace Project.MVVM.View
 
         private void Send_msg_Click(object sender, RoutedEventArgs e)
         {
-            int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-            string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
-            int id_do_kogo =Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-            string tresc_wiadomosci = Send_Message.Text;
-            using (var db = new DBPROJECT())
+            if (Send_do_kogo.SelectedValue != null)
             {
-                using (var contex = db.Database.BeginTransaction())
+                int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+                int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+                string tresc_wiadomosci = Send_Message.Text;
+                using (var db = new DBPROJECT())
                 {
-                    if (string.IsNullOrWhiteSpace(tresc_wiadomosci) || tresc_wiadomosci.Length < 1) { }
-                    else
+                    using (var contex = db.Database.BeginTransaction())
                     {
-                        db.wiadomosci.Add(new wiadomosci { id_nadawcy = id_currect_user, id_odbiorcy = id_do_kogo, Wiadomosc = tresc_wiadomosci, czy_przeczytane = false });
-                        db.SaveChanges();
-                        contex.Commit();
-                        Send_Message.Text = "";
-                        fast_refresh();
-                        BindUserlist();
+                        if (string.IsNullOrWhiteSpace(tresc_wiadomosci) || tresc_wiadomosci.Length < 1) { }
+                        else
+                        {
+                            db.wiadomosci.Add(new wiadomosci { id_nadawcy = id_currect_user, id_odbiorcy = id_do_kogo, Wiadomosc = tresc_wiadomosci, czy_przeczytane = false });
+                            db.SaveChanges();
+                            contex.Commit();
+                            Send_Message.Text = "";
+                            fast_refresh();
+                            BindUserlist();
+                        }
                     }
                 }
             }
