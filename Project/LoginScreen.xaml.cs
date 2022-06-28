@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Notifications.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -67,8 +68,16 @@ namespace Project
                     }
                     else
                     {
-                        MessageBox.Show($"Użytkownik lub hasło niepoprawne");
-                    }
+                        var notificationManager = new NotificationManager();
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = $"Błędne Login lub Hasło",
+                            Message = $"Sprawdź swoje dane logowania! {Environment.NewLine}I spróbój ponownie",
+                            Type = NotificationType.Error
+                    });
+
+
+                }
                   
                 }
 

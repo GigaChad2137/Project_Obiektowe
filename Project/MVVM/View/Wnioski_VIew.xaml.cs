@@ -51,35 +51,54 @@ namespace Project.MVVM.View
         }
         private void Send_wniosek_Click(object sender, RoutedEventArgs e)
         {
-            if (Send_do_kogo.SelectedValue != null && kwota.Text != "")
+            if (Send_do_kogo.SelectedValue != null )
             {
                 int typ_wniosku = (int)Send_do_kogo.SelectedValue;
                 int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
                 string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
                 int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
                 string tresc_wiadomosci = Notka.Text;
+                var notificationManager = new NotificationManager();
                 using (var db = new DBPROJECT())
                 {
                     using (var contex = db.Database.BeginTransaction())
                     {
-
                         var testow = db.wnioski.First(x => x.id == typ_wniosku);
                         if (testow.typ_wniosku == "Wynagrodzenie")
                         {
-                            string notka = Notka.Text;
-                            db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka, kwota = Convert.ToInt32(kwota.Text) });
-                            db.SaveChanges();
-                            Notka.Text = "";
-                        }
-                        else
-                        {
-                            if (Data_Start.SelectedDate == null || Data_koniec.SelectedDate == null)
+                            if (kwota.Text != "")
                             {
-                                var notificationManager = new NotificationManager();
+                                string notka = Notka.Text;
+                                db.user_wnioski.Add(new user_wnioski { id_pracownika = id_currect_user, id_wniosku = typ_wniosku, Data_rozpoczecia = DateTime.Today, Data_zakonczenia = DateTime.Today, Notka = notka, kwota = Convert.ToInt32(kwota.Text) });
+                                db.SaveChanges();
+                                Notka.Text = "";
+                                notificationManager.Show(new NotificationContent
+                                {
+                                    Title = $"Wniosek Wysłany",
+                                    Message = $"Wniosek został wysłany poczekaj na rozpatrzenie",
+                                    Type = NotificationType.Success
+                                });
+                            }
+                            else
+                            {
                                 notificationManager.Show(new NotificationContent
                                 {
                                     Title = $"Brak Wymaganego Pola",
-                                    Message = $"Upewnij się że Pola z datami są uzupełnione",
+                                    Message = $"Upewnij się że z Wynagrodzeniem jest uzupełnione",
+                                    Type = NotificationType.Error
+                                });
+                            }
+
+                        }
+                        else
+                        {
+                            if (Data_Start.SelectedDate == null || Data_koniec.SelectedDate == null || Data_Start.SelectedDate > Data_koniec.SelectedDate)
+                            {
+                              
+                                notificationManager.Show(new NotificationContent
+                                {
+                                    Title = $"Brak Wymaganego Pola",
+                                    Message = $"Upewnij się że Pola z datami są poprawnie  uzupełnione",
                                     Type = NotificationType.Error
                                 });
                             }
@@ -95,6 +114,12 @@ namespace Project.MVVM.View
                                 Data_Start.DisplayDate = DateTime.Today;
                                 Data_koniec.SelectedDate = null;
                                 Data_koniec.DisplayDate = DateTime.Today;
+                                notificationManager.Show(new NotificationContent
+                                {
+                                    Title = $"Wniosek Wysłany",
+                                    Message = $"Wniosek został wysłany poczekaj na rozpatrzenie",
+                                    Type = NotificationType.Success
+                                });
 
                             }
 

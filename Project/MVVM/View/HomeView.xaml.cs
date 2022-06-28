@@ -27,8 +27,8 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             Pokaz_wiadomosci.DataContext = $"Witaj!";
-         //   load_home_content();
-         //   refresh_nowe_wnioski();
+            load_home_content();
+            refresh_nowe_wnioski();
 
 
 
