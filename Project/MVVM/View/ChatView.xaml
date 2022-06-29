@@ -6,7 +6,7 @@
         xmlns:viewModel="clr-namespace:Project.MVVM.ViewModel"
         xmlns:local="clr-namespace:Project" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800.05" Width="1000" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="MainWindow" Height="600" Width="800" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -68,7 +68,7 @@
 
         <Grid Margin="10,30,30,10" Background="#1F2644">
 
-            <Button x:Name="Logout" Height="35" Background="#FA198B" Foreground="White" FontSize="20" Margin="892,-8,23,693" Click="CloseIt_Click" Style="{DynamicResource RoundedButtonStyle}">
+            <Button x:Name="Logout" Height="35" Background="#FA198B" Foreground="White" FontSize="20"  Click="CloseIt_Click" Style="{DynamicResource RoundedButtonStyle}" Margin="688,-14,25,499">
                 <materialDesign:PackIcon Kind="Close" Foreground="White" Width="30" Height="28" VerticalAlignment="Center" RenderTransformOrigin="0.9,0.55"/>
             </Button>
 
@@ -94,7 +94,7 @@
                 </ComboBox>
 
                 <Label />
-                <RichTextBox  x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="440"  FontSize="15" Margin="102,0,68,0">
+                <RichTextBox  x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="285"  FontSize="15" Margin="70,0,20,0">
                     <RichTextBox.Resources>
                         <Style TargetType="{x:Type RichTextBox}">
                             <Style.Resources>
@@ -110,15 +110,15 @@
                     </RichTextBox.Resources>
                 </RichTextBox>
             </StackPanel>
-            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="144,524,505,127"/>
-            <TextBox x:Name="Send_Message" Background="White" Foreground="Black"  FontSize="18" Margin="144,555,115,134">
+            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="113,372,-113,-372" />
+            <TextBox x:Name="Send_Message" Background="White" Foreground="Black"  FontSize="18" Margin="116,397,64,91">
                 <TextBox.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="10"/>
                     </Style>
                 </TextBox.Resources>
             </TextBox>
-            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij" HorizontalAlignment="Left" Height="40"  Margin="370,598,0,0" VerticalAlignment="Top" Width="150"
+            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij" HorizontalAlignment="Left" Height="40"  Margin="286,449,0,0" VerticalAlignment="Top" Width="150"
                 Background="#FA198B"
                 Foreground="White"
                 FontFamily="Arial"

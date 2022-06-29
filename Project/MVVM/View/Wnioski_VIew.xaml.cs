@@ -131,6 +131,16 @@ namespace Project.MVVM.View
                 }
             }
         }
+        private void CloseIt_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+
+        }
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            this.DragMove();
+        }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int typ_wniosku = (int)Send_do_kogo.SelectedValue;
@@ -178,10 +188,6 @@ namespace Project.MVVM.View
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
-            this.DragMove();
-        }
+    
     }
 }
