@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy WorkRaportPdf.xaml
-    /// </summary>
     public partial class WorkRaportPdf : Window
     {
         public WorkRaportPdf()
@@ -38,7 +26,6 @@ namespace Project.MVVM.View
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                    
                     var dane_usera = db.informacje_personalne.Where(x => x.Id_pracownika == id_currect_user).First();
                     double zarobek_na_godzine = dane_usera.Zarobki / 160;
                     var miesiac_rozliczenia = db.praca.Where(x => x.Id_pracownika == id_currect_user && x.Data >= first && x.Data <= last && x.Data_rozpoczecia != null && x.Data_zakonczenia != null).ToList();
@@ -55,7 +42,6 @@ namespace Project.MVVM.View
                     Podsumowanie_wyplaty.Text = $"{suma_miesiac}zł";
                     imie_nazwisko_pracownika.Text = $"{dane_usera.Imie} {dane_usera.Nazwisko}";
                     Data_rozliczenia.Text = $"{first.ToShortDateString()}-{last.ToShortDateString()}";
-
                 }
             }
         }
@@ -83,6 +69,5 @@ namespace Project.MVVM.View
         public TimeSpan? czas_stop { get; set; }
         public string godziny { get; set; }
         public string kwota { get; set; }
-
     }
 }

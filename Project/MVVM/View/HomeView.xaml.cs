@@ -15,32 +15,22 @@ using System.Windows.Threading;
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy HomeView.xaml
-    /// </summary>
-
     public partial class HomeView : UserControl
     {
-       
-
         public HomeView()
         {
             InitializeComponent();
             Pokaz_wiadomosci.DataContext = $"Witaj!";
-          //  load_home_content();
-          //  refresh_nowe_wnioski();
-
-
-
+            refresh_nowe_wnioski();
+            load_home_content();
         }
-
         private void load_home_content()
         {
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosci);
+            dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosciThread);
+            dispatcherTimer.Tick += new EventHandler(refresh_nowe_wnioskiThread);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
             dispatcherTimer.Start();
-            Pokaz_wnioski.DataContext = "to do sprawdz ile wnioskow";
             using (DBPROJECT db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
@@ -67,13 +57,12 @@ namespace Project.MVVM.View
                 }
             }
         }
-
         private void Pokaz_Wiadomosci(object sender, RoutedEventArgs e)
         {
             ChatView dashboard = new ChatView();
             dashboard.Show();
         }
-        private void refresh_nowe_wiadomosci(object source, EventArgs e)
+        private void refresh_nowe_wiadomosciThread(object source, EventArgs e)
         {
             using (DBPROJECT db = new DBPROJECT())
             {
@@ -85,6 +74,10 @@ namespace Project.MVVM.View
                     {
                         Pokaz_wiadomosci.DataContext = $"Masz {przeczytane} nowych wiadomości";
                     }
+                    else if (przeczytane == 1)
+                    {
+                        Pokaz_wiadomosci.DataContext = $"Masz {przeczytane} nową wiadomości";
+                    }
                     else
                     {
                         Pokaz_wiadomosci.DataContext = $"Masz {przeczytane} nowe wiadomości";
@@ -92,9 +85,8 @@ namespace Project.MVVM.View
                 }
             }
         }
-        private void refresh_nowe_wnioski()
+        private void refresh_nowe_wnioskiThread(object source,EventArgs e)
         {
-
             using (DBPROJECT db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
@@ -115,15 +107,13 @@ namespace Project.MVVM.View
                         {
                             Pokaz_wnioski.DataContext = $"  {przeczytane} Nowe Wnioski";
                         }
-
                     }
                     else
                     {
-                     
-                        var przeczytane = db.user_wnioski.Where(a => a.id_pracownika == id_currect_user && a.noti_c < 1).Count();
+                        var przeczytane = db.user_wnioski.Where(a => a.id_pracownika == id_currect_user && a.noti_c < 1 && a.Status_Wniosku != null).Count();
                         if (przeczytane == 0)
                         {
-                            Pokaz_wnioski.DataContext = $"Wnioski";
+                            Pokaz_wnioski.DataContext = $"    Brak nowych {Environment.NewLine}      Wniosków";
                         }
                         else if ( przeczytane == 1)
                         {
@@ -134,7 +124,6 @@ namespace Project.MVVM.View
                             Pokaz_wnioski.DataContext = $"    {przeczytane} Nowe Statusy {Environment.NewLine}        Wniosków";
                         }
                     }
-                    
                 }
             }
         }
@@ -220,6 +209,48 @@ namespace Project.MVVM.View
                 }
             }
         }
+        private void refresh_nowe_wnioski()
+        {
+            using (DBPROJECT db = new DBPROJECT())
+            {
+                using (var contex = db.Database.BeginTransaction())
+                {
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                    if ((bool)Application.Current.Properties["currect_user_admin"] == true)
+                    {
+                        var przeczytane = db.user_wnioski.Where(a => a.Status_Wniosku == null).Count();
+                        if (przeczytane == 0)
+                        {
+                            Pokaz_wnioski.DataContext = $"    Brak nowych {Environment.NewLine}      Wniosków";
+                        }
+                        else if (przeczytane == 1)
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowy Wniosek";
+                        }
+                        else
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowe Wnioski";
+                        }
+                    }
+                    else
+                    {
+                        var przeczytane = db.user_wnioski.Where(a => a.id_pracownika == id_currect_user && a.noti_c < 1 && a.Status_Wniosku != null).Count();
+                        if (przeczytane == 0)
+                        {
+                            Pokaz_wnioski.DataContext = $"    Brak nowych {Environment.NewLine}      Wniosków";
+                        }
+                        else if (przeczytane == 1)
+                        {
+                            Pokaz_wnioski.DataContext = $"  {przeczytane} Nowy Status {Environment.NewLine}       Wniosku";
+                        }
+                        else
+                        {
+                            Pokaz_wnioski.DataContext = $"    {przeczytane} Nowe Statusy {Environment.NewLine}        Wniosków";
+                        }
+                    }
+                }
+            }
+        }
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
         {
             ChatView dashboard = new ChatView();
@@ -229,11 +260,9 @@ namespace Project.MVVM.View
         {
             WnioskiVIew dashboard = new WnioskiVIew();
             dashboard.Show();
-
         }
         private void Status_Pracy(object sender, RoutedEventArgs e)
         {
-
             WorkRaportPdf dashboard = new WorkRaportPdf();
             dashboard.Show();
         }
@@ -244,18 +273,13 @@ namespace Project.MVVM.View
                 using (var contex = db.Database.BeginTransaction())
                 {
                     DateTime thisDay = DateTime.Today;
-                    Trace.WriteLine(thisDay);
                     int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
                     var czy_pracuje = db.praca.First(x => x.Id_pracownika == id_currect_user && x.Data == thisDay);
                     DateTime Date_with_time = DateTime.Now;
-                    Trace.WriteLine(Date_with_time);
                     if (czy_pracuje.Czy_pracuje == "Pracuje")
                     {
                         Czy_pracuje.DataContext = "Rozpocznij Prace";
                         czy_pracuje.Data_zakonczenia = Date_with_time;
-                        Trace.WriteLine(" pracuje if");
-                        Trace.WriteLine("Data roz" + czy_pracuje.Data_rozpoczecia);
-                        Trace.WriteLine("Data zak" + czy_pracuje.Data_zakonczenia);
                         czy_pracuje.Czy_pracuje = "Nie Pracuje";
                        
                     }
@@ -263,20 +287,12 @@ namespace Project.MVVM.View
                     {
                         Czy_pracuje.DataContext = "Zakończ Prace";
                         czy_pracuje.Data_rozpoczecia = Date_with_time;
-                        Trace.WriteLine("Nie pracuje if");
-                        Trace.WriteLine("Data roz"+czy_pracuje.Data_rozpoczecia);
-                        Trace.WriteLine("Data zak"+czy_pracuje.Data_zakonczenia);
                         czy_pracuje.Czy_pracuje = "Pracuje";
-                  
-
                     }
                     db.SaveChanges();
                     contex.Commit();
-
                 }
             }
-           
-            
         }
     }
 }

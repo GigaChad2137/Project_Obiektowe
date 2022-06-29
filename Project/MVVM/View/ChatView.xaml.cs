@@ -2,23 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ChatView.xaml
-    /// </summary>
     public partial class ChatView : Window
     {
         public ChatView()
@@ -30,14 +20,12 @@ namespace Project.MVVM.View
        public  List<Czat> user = new List<Czat>();
         private void BindUserlist()
         {
-
             user.Clear();
             int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                   
                     var imiona = (from users in db.users
                                 join informacje_personalne in db.informacje_personalne
                                 on users.Id equals informacje_personalne.Id_pracownika
@@ -49,7 +37,6 @@ namespace Project.MVVM.View
                              
                                 }).ToList();
                     var czy_nowa_wiadomosc = db.wiadomosci.OrderByDescending(u => u.Id);
-                 
                     foreach (var person in imiona)
                     {
                         int czy_istnieje = czy_nowa_wiadomosc.Where(s => s.id_nadawcy == person.Id_pracownika && s.id_odbiorcy == id_currect_user).Count();
@@ -60,7 +47,6 @@ namespace Project.MVVM.View
                         }
                         else
                         {
-
                            var co_zawiera = czy_nowa_wiadomosc.First(s => s.id_nadawcy == person.Id_pracownika && s.id_odbiorcy==id_currect_user);
                             Trace.WriteLine(person.Nazwisko + " " + co_zawiera.czy_przeczytane + " " + co_zawiera.Wiadomosc);
                             if (co_zawiera.czy_przeczytane == false)
@@ -70,8 +56,6 @@ namespace Project.MVVM.View
                             }
                             else
                             {
-
-      
                                 user.Add(new Czat { Id_pracownika = person.Id_pracownika, Imie = person.Imie, Nazwisko = person.Nazwisko, czy_nowa_wiadomosc = "" });
                             }
                         }
@@ -80,7 +64,6 @@ namespace Project.MVVM.View
                 }
             }
         }
-
         private void Send_msg_Click(object sender, RoutedEventArgs e)
         {
             if (Send_do_kogo.SelectedValue != null)
@@ -109,7 +92,6 @@ namespace Project.MVVM.View
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             fast_refresh();
             DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(refresh);
@@ -139,9 +121,7 @@ namespace Project.MVVM.View
                     foreach (var wiadomosc in czat)
                     {
                         if (wiadomosc.Wiadomosc.Length >= 1)
-                            if(string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
-                            { }
-                            else
+                            if(!string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
                             {
                                 if (czy_1_linia == 0)
                                 {
@@ -173,7 +153,7 @@ namespace Project.MVVM.View
                     db.SaveChanges();
                     var czat = (from users in db.users
                                 join wiadomosci in db.wiadomosci
-               on users.Id equals wiadomosci.id_nadawcy
+                                on users.Id equals wiadomosci.id_nadawcy
                                 where wiadomosci.id_nadawcy == id_currect_user && wiadomosci.id_odbiorcy == id_do_kogo || wiadomosci.id_nadawcy == id_do_kogo && wiadomosci.id_odbiorcy == id_currect_user
                                 orderby wiadomosci.Id ascending
                                 select new
@@ -185,9 +165,7 @@ namespace Project.MVVM.View
                     foreach (var wiadomosc in czat)
                     {
                         if (wiadomosc.Wiadomosc.Length >= 1)
-                            if (string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
-                            { }
-                            else
+                            if (!string.IsNullOrWhiteSpace(wiadomosc.Wiadomosc))
                             {
                                 if (czy_1_linia == 0)
                                 {
@@ -206,11 +184,9 @@ namespace Project.MVVM.View
                 }
             }
         }
-
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -226,5 +202,4 @@ namespace Project.MVVM.View
         public string Nazwisko { get; set; }
         public string czy_nowa_wiadomosc { get; set; }
     }
-
 }

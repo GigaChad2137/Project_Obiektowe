@@ -1,36 +1,21 @@
 ﻿using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ChatView.xaml
-    /// </summary>
     public partial class WnioskiVIew : Window
     {
         public WnioskiVIew()
         {
             InitializeComponent();
             BindUserlist();
-           // Send_Message.Visibility = Visibility.Hidden;
         }
-
-
         public List<wnioski> wniosek { get; set; }
         private void BindUserlist()
         {
@@ -44,8 +29,6 @@ namespace Project.MVVM.View
                     Send_do_kogo.ItemsSource = wniosek;
                     Send_do_kogo.DisplayMemberPath = "typ_wniosku";
                     Send_do_kogo.SelectedValuePath = "id";
-
-                 
                 }
             }
         }
@@ -120,13 +103,9 @@ namespace Project.MVVM.View
                                     Message = $"Wniosek został wysłany poczekaj na rozpatrzenie",
                                     Type = NotificationType.Success
                                 });
-
                             }
-
-
                         }
                         contex.Commit();
-
                     }
                 }
             }
@@ -134,7 +113,6 @@ namespace Project.MVVM.View
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -157,7 +135,6 @@ namespace Project.MVVM.View
                         Data_koniec.Visibility = Visibility.Visible;
                         kwotal.Visibility = Visibility.Hidden;
                         kwota.Visibility = Visibility.Hidden;
-
                     }
                     else if (testow.typ_wniosku == "L4")
                     {
@@ -167,7 +144,6 @@ namespace Project.MVVM.View
                         Data_koniec.Visibility = Visibility.Visible;
                         kwotal.Visibility = Visibility.Hidden;
                         kwota.Visibility = Visibility.Hidden;
-
                     }
                     else if (testow.typ_wniosku == "Wynagrodzenie")
                     {
@@ -177,7 +153,6 @@ namespace Project.MVVM.View
                         Data_Start.Visibility = Visibility.Hidden;
                         Data_koniecl.Visibility = Visibility.Hidden;
                         Data_koniec.Visibility = Visibility.Hidden;
-
                     }
                 }
             }
@@ -187,7 +162,5 @@ namespace Project.MVVM.View
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
-
-    
     }
 }
