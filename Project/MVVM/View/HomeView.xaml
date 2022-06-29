@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Project.MVVM.View"
+                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -69,8 +70,8 @@
             <Border Width="400" Height="200">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                        <GradientStop Color="#5bc3ff" Offset="0" />
-                        <GradientStop Color="#3aa0ff" Offset="1" />
+                        <GradientStop Color="#084C61" Offset="0" />
+                        <GradientStop Color="#4F6272" Offset="1" />
                     </LinearGradientBrush>
                 </Border.Background>
                 <Border.Clip>
@@ -90,7 +91,7 @@
 
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,2">
-                        <GradientStop Color="#ffc554" Offset="0" />
+                        <GradientStop Color="#DF2935" Offset="0" />
                         <GradientStop Color="#ffb73a" Offset="1" />
                     </LinearGradientBrush>
                 </Border.Background>
@@ -122,7 +123,7 @@
                         </TextBlock>
                     </Button>
                 </Border>
-                <Border Width="150" Height="150" Background="#4e99ff" CornerRadius="10">
+                <Border Width="150" Height="150" Background="#03CEA4" CornerRadius="10">
                     <Button Click="Stwórz_Wniosek" Background="Transparent"  HorizontalAlignment="Center" Padding="40,20,20,20" Width="150">
 
                         <TextBlock Foreground="White"  FontSize="18" Width="150" Height="126">
@@ -133,7 +134,7 @@
                         </TextBlock>
                     </Button>
                 </Border>
-                <Border Width="150" Height="150" Background="#bf0b0b" CornerRadius="10">
+                <Border Width="150" Height="150" Background="#3D3A4B" CornerRadius="10">
 
                     <Button Click="Status_Pracy" Background="Transparent"  HorizontalAlignment="Center" Padding="25,20,20,20" Width="150">
 
@@ -148,9 +149,11 @@
                     </Button>
 
                 </Border>
-                <Border Width="150" Height="150" Background="#9c7728" CornerRadius="10">
+                <Border Width="150" Height="150" Background="#00A6ED" CornerRadius="10">
                     <Button Click="Czy_Pracuje" Background="Transparent"  HorizontalAlignment="Center" Padding="0,20,20,20" Width="150">
-                        <TextBlock  x:Name="Czy_pracuje"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="15" Margin="10,10,10,0"/>
+                        <TextBlock  x:Name="Czy_pracuje"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="15" Margin="10,10,10,0">
+                            
+                        </TextBlock>
                     </Button>
                 </Border>
             </StackPanel>

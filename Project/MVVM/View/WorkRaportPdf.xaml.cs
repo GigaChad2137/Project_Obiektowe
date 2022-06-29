@@ -24,13 +24,7 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
             fillList();
-
-
-
-
-
         }
-
         private void fillList()
         {
             List<Pdf_view> items = new List<Pdf_view>();
@@ -47,15 +41,13 @@ namespace Project.MVVM.View
                     
                     var dane_usera = db.informacje_personalne.Where(x => x.Id_pracownika == id_currect_user).First();
                     double zarobek_na_godzine = dane_usera.Zarobki / 160;
-                    var miesiac_rozliczenia = db.praca.Where(x => x.Id_pracownika == id_currect_user && x.Data >= first && x.Data <= last).ToList();
+                    var miesiac_rozliczenia = db.praca.Where(x => x.Id_pracownika == id_currect_user && x.Data >= first && x.Data <= last && x.Data_rozpoczecia != null && x.Data_zakonczenia != null).ToList();
                     foreach (var dzien in miesiac_rozliczenia)
                     {
-                       // dzien.Data_rozpoczecia.Value.TimeOfDay
+                        double suma_dzien = 0;
                         TimeSpan? godziny_przepracowane = dzien.Data_zakonczenia - dzien.Data_rozpoczecia;
-                      
-                        Trace.WriteLine(godziny_przepracowane);
-                        double suma_dzien =Math.Round(godziny_przepracowane.Value.TotalHours * zarobek_na_godzine,2);
-                        items.Add(new Pdf_view { data = dzien.Data.ToString(), czas_start = dzien.Data_rozpoczecia.Value.TimeOfDay, czas_stop = dzien.Data_zakonczenia.Value.TimeOfDay,godziny= $"{Math.Round(godziny_przepracowane.Value.TotalHours,2)}h",kwota=$"{suma_dzien}zł" });
+                        suma_dzien = Math.Round(godziny_przepracowane.Value.TotalHours * zarobek_na_godzine, 2);
+                        items.Add(new Pdf_view { data = dzien.Data.ToString(), czas_start = dzien.Data_rozpoczecia.Value.TimeOfDay, czas_stop = dzien.Data_zakonczenia.Value.TimeOfDay, godziny = $"{Math.Round(godziny_przepracowane.Value.TotalHours, 2)}h", kwota = $"{suma_dzien}zł" });
                         suma_miesiac = suma_miesiac + suma_dzien;
                     }
                     Listviewpdf.ItemsSource = items;
@@ -66,7 +58,6 @@ namespace Project.MVVM.View
 
                 }
             }
-         
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -83,7 +74,6 @@ namespace Project.MVVM.View
             {
                 this.IsEnabled = true;
             }
-
         }
     }
     public class Pdf_view
