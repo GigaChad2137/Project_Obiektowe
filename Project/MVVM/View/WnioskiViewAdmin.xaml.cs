@@ -2,33 +2,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Principal;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy ChatView.xaml
-    /// </summary>
     public partial class WnioskiVIewAdmin : Window
     {
         public WnioskiVIewAdmin()
         {
             InitializeComponent();
             BindUserlist();
-        
         }
-
-
         public List<Rozpatrz_wnioski> rozpatrz_wnioski = new List<Rozpatrz_wnioski>();
         private void BindUserlist()
         {
@@ -54,8 +40,6 @@ namespace Project.MVVM.View
                                     user_wnioski.Notka,
                                     user_wnioski.kwota
                                   }).ToList();
-
-                  
                     foreach (var wniosek in wnioski_do_rozpatrzenia)
                     {
                         rozpatrz_wnioski.Add(new Rozpatrz_wnioski { id_wniosku = wniosek.Id, id_pracownika = wniosek.id_pracownika, typ_wniosku = wniosek.typ_wniosku, imie = wniosek.Imie, nazwisko = wniosek.Nazwisko, data_start = wniosek.Data_rozpoczecia, data_end = wniosek.Data_zakonczenia, notka = wniosek.Notka, kwota = wniosek.kwota });
@@ -63,7 +47,6 @@ namespace Project.MVVM.View
                     DataContext = rozpatrz_wnioski;
                     Send_do_kogo.ItemsSource = rozpatrz_wnioski;
                     Send_do_kogo.SelectedValuePath = "id_wniosku";
-                 
                 }
             }
         }
@@ -85,7 +68,6 @@ namespace Project.MVVM.View
                         find_wniosek.Status_Wniosku = true;
                         Send_do_kogo.DataContext = null;
                         db.SaveChanges();
-                        Trace.WriteLine(find_wniosek.kwota + " test");
                         if (find_wniosek.kwota == null)
                         {
                             DateTime[] zakres_nieobecnosci = Enumerable.Range(0, 1 + end.Subtract(start).Days)
@@ -123,7 +105,6 @@ namespace Project.MVVM.View
                 BindUserlist();
                 Send_do_kogo.Items.Refresh();
             }
-                
         }
         private void Send_odrzuc_wniosek_Click(object sender, RoutedEventArgs e)
         {
@@ -149,9 +130,7 @@ namespace Project.MVVM.View
                 rozpatrz_wnioski.Clear();
                 BindUserlist();
                 Send_do_kogo.Items.Refresh();
-
             }
-            
         }
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -183,7 +162,6 @@ namespace Project.MVVM.View
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

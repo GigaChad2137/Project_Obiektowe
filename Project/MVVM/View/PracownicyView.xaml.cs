@@ -1,23 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Diagnostics;
+
 
 namespace Project.MVVM.View
 {
-    /// <summary>
-    /// Logika interakcji dla klasy PracownicyView.xaml
-    /// </summary>
     public partial class PracownicyView : UserControl
     {
         public PracownicyView()
@@ -39,7 +26,6 @@ namespace Project.MVVM.View
                                          Nazwisko = inf_p.Nazwisko,
                                          Rola = roles.role,
                                          Zarobki = inf_p.Zarobki,
-                                         Dni_urlopu = inf_p.Dni_urlopowe
                                      }).ToList();
                     foreach (var p in id_finder)
                     {
@@ -54,7 +40,7 @@ namespace Project.MVVM.View
                                 Rola_pracownika = p.Rola,
                                 Zarobki_pracownika = p.Zarobki,
                                 Czy_pracuje = praca_checker.Czy_pracuje,
-                                Urlop_pracownika = p.Dni_urlopu
+                              
                             }
                             );
                         }
@@ -70,7 +56,7 @@ namespace Project.MVVM.View
                                 Rola_pracownika = p.Rola,
                                 Zarobki_pracownika = p.Zarobki,
                                 Czy_pracuje = "Poza Pracą",
-                                Urlop_pracownika = p.Dni_urlopu
+         
                             });
                         }
                     }
@@ -85,11 +71,6 @@ namespace Project.MVVM.View
             public string Rola_pracownika { get; set; }
             public int Zarobki_pracownika { get; set; }
             public string Czy_pracuje { get; set; }
-            public int Urlop_pracownika { get; set; }
-        }
-        private void PracownicyGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

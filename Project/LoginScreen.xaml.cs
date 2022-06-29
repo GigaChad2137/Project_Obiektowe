@@ -1,41 +1,25 @@
 ﻿using Notifications.Wpf;
 using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-
 
 namespace Project
 {
-    /// <summary>
-    /// Logika interakcji dla klasy LoginScreen.xaml
-    /// </summary>
     public partial class LoginScreen : Window
     {
         public LoginScreen()
         {
             InitializeComponent();
         }
-
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                   
                     var passwdhashed = GetHashedText(txtPassword.Password);
                     if (db.users.Where(c => c.username == txtUsername.Text && c.password == passwdhashed).Count() > 0)
                     {
@@ -74,13 +58,9 @@ namespace Project
                             Title = $"Błędne Login lub Hasło",
                             Message = $"Sprawdź swoje dane logowania! {Environment.NewLine}I spróbój ponownie",
                             Type = NotificationType.Error
-                    });
-
-
+                        });
+                    }
                 }
-                  
-                }
-
             }
         }
         private string GetHashedText(string inputData)
@@ -95,7 +75,6 @@ namespace Project
         {
             this.Close();
             App.Current.Shutdown();
-
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
