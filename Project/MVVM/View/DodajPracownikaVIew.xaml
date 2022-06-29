@@ -5,9 +5,66 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Project.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="#1B1B1B">
-    <Border Background="#2e2a4a" CornerRadius="20" Margin="20">
-        <StackPanel Margin="20,5,20,20" Background="#2e2a4a">
+             d:DesignHeight="450" d:DesignWidth="800" Background="#1F2948">
+    <UserControl.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="20" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" Margin="0,0,-29,0">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border Background="#1F2644" CornerRadius="20" Margin="20">
+        <StackPanel Margin="20,5,20,20" Background="#1F2644">
 
             <Label Content="Dodaj Pracownika" Foreground="White" FontSize="25" HorizontalAlignment="Center"></Label>
             <Separator Background="White"></Separator>
@@ -18,6 +75,13 @@
             <Label Content="Nazwisko" Margin="179,0,0,0" Foreground="White"/>
             <TextBox Name="Register_Nazwisko" Background="WhiteSmoke"  Width="250" Foreground="Black" FontSize="15"  Height="20"></TextBox>
             <Label Content="Zarobki" Margin="179,0,0,0" Foreground="White"/>
+
+
+
+
+
+
+
             <TextBox Name="Register_Zarobki" Background="WhiteSmoke"  PreviewTextInput="NumberValidationTextBox"  Width="250" Foreground="Black" FontSize="15"  Height="20"></TextBox>
             <Label Content="Password" Foreground="White" Margin="179,0,0,0"/>
             <PasswordBox Name="Register_password" Background="WhiteSmoke"  Foreground="Black" FontSize="15" Width="250"  Height="20"></PasswordBox>
@@ -25,11 +89,13 @@
             <PasswordBox Name="Register_retypePassword" Background="WhiteSmoke"  Foreground="Black" FontSize="15" Width="250"  Height="20"></PasswordBox>
             <Label Content="Czy pracownik jest adminem:" FontSize="15" Foreground="White" Margin="179,0,0,0"/>
             <CheckBox Content="Tak" Name="Register_czy_szef" FontSize="16" Margin="181,0,0,0" Foreground="White" />
+            <Button  Click="Register_btnclick_Click" x:Name="Register_btnclick" Content="Zatwierdź" HorizontalAlignment="Left" Height="40"  Margin="216 25,0,0" VerticalAlignment="Top" Width="150"
+                Background="#FA198B"
+                Foreground="White"
+                FontFamily="Arial"
+                FontSize="20" Style="{DynamicResource RoundedButtonStyle}"/>
 
 
-
-
-            <Button x:Name="Register_btnclick" Click="Register_btnclick_Click" Content="Zatwierdź"  Width="250" Margin="50 25" Background="WhiteSmoke"    Foreground="Black" FontSize="18"/>
         </StackPanel>
     </Border>
 </UserControl>

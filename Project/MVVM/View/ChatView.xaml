@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Project.MVVM.ViewModel"
-        xmlns:local="clr-namespace:Project"
+        xmlns:local="clr-namespace:Project" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" WindowStyle="SingleBorderWindow"  Background="Transparent" >
+        Title="MainWindow" Height="800.05" Width="1000" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -26,7 +26,7 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style TargetType="{x:Type Button}">
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -38,7 +38,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="20" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" Margin="0,0,-29,0">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -46,12 +46,12 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#d5d4d9"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
@@ -64,43 +64,67 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border Background="Black" CornerRadius="20" Margin="20">
+    <Border Background="#1F2644" CornerRadius="20" Margin="20">
 
-        <StackPanel Margin="20" Background="Black">
+        <Grid Margin="10,30,30,10" Background="#1F2644">
+
+            <Button x:Name="Logout" Height="35" Background="#FA198B" Foreground="White" FontSize="20" Margin="892,-8,23,693" Click="CloseIt_Click" Style="{DynamicResource RoundedButtonStyle}">
+                <materialDesign:PackIcon Kind="Close" Foreground="White" Width="30" Height="28" VerticalAlignment="Center" RenderTransformOrigin="0.9,0.55"/>
+            </Button>
+
+            <Label  Margin="25,0,0,0" Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+
+            <StackPanel Margin="45" Background="#1F2644">
 
 
+                <ComboBox Margin="25,0,0,0" x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" SelectionChanged="Send_do_kogo_SelectionChanged" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} {1} {2}">
+                                        <Binding Path="Nazwisko"/>
+                                        <Binding Path="Imie"/>
+                                        <Binding Path="czy_nowa_wiadomosc"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
 
-            <Label Content="Wyślij wiadomość" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
-            <Separator Background="White"/>
-            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"  SelectedValuePath="Id_pracownika" SelectionChanged="Send_do_kogo_SelectionChanged" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} {1} {2}">
-                                    <Binding Path="Nazwisko"/>
-                                    <Binding Path="Imie"/>
-                                    <Binding Path="czy_nowa_wiadomosc"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Label />
-            <RichTextBox x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="307"  FontSize="15" Margin="102,0,68,0">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0"/>
+                <Label />
+                <RichTextBox  x:Name="Read_messages" IsReadOnly="True" Background="WhiteSmoke" Height="440"  FontSize="15" Margin="102,0,68,0">
+                    <RichTextBox.Resources>
+                        <Style TargetType="{x:Type RichTextBox}">
+                            <Style.Resources>
+                                <Style TargetType="{x:Type Paragraph}">
+                                    <Setter Property="Margin" Value="0"/>
+                                </Style>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="11" />
+                                </Style>
+                            </Style.Resources>
+                        </Style>
+
+                    </RichTextBox.Resources>
+                </RichTextBox>
+            </StackPanel>
+            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="144,524,505,127"/>
+            <TextBox x:Name="Send_Message" Background="White" Foreground="Black"  FontSize="18" Margin="144,555,115,134">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
-            <Label ></Label>
-            <Label  Content="Wyślij Wiadomość:" Foreground="Wheat" Margin="95,0,0,0"/>
-            <TextBox x:Name="Send_Message" Background="White" Height="30" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />
-          
-            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="White"    Foreground="Black" FontSize="18" Height="63"/>
+                </TextBox.Resources>
+            </TextBox>
+            <Button x:Name="Send_msg" Click="Send_msg_Click" Content="Wyślij" HorizontalAlignment="Left" Height="40"  Margin="370,598,0,0" VerticalAlignment="Top" Width="150"
+                Background="#FA198B"
+                Foreground="White"
+                FontFamily="Arial"
+                FontSize="20" Style="{DynamicResource RoundedButtonStyle}"/>
 
-        </StackPanel>
+
+        </Grid>
     </Border>
 </Window>

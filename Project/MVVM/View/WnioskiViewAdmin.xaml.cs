@@ -185,10 +185,12 @@ namespace Project.MVVM.View
            
 
         }
-       
-   
 
-
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            this.DragMove();
+        }
     }
     public class Rozpatrz_wnioski
     {
