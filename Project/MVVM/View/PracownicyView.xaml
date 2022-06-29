@@ -14,12 +14,21 @@
             <DataGrid IsReadOnly="True" x:Name="PracownicyGrid"  Margin="10,10,10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="700" Height="283" Background="#1F2644" SelectionChanged="PracownicyGrid_SelectionChanged">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}" >
-                        <Setter Property="Background" Value="WhiteSmoke"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="#7F95D1"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="BorderThickness" Value="0,0,1,2"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
+                        <Setter Property="BorderBrush" Value="#7F95D1"/>
 
 
+                    </Style>
+                    <Style TargetType="{x:Type DataGridRow}" >
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Background" Value="#7F95D1"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,2"/>
+                        <Setter Property="BorderBrush" Value="#7F95D1"/>
+                        
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns  >

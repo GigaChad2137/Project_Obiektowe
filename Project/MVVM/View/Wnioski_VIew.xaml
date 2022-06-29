@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:Project.MVVM.ViewModel"
-        xmlns:local="clr-namespace:Project"
+        xmlns:local="clr-namespace:Project" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" WindowStyle="SingleBorderWindow"  Background="Transparent" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="MainWindow" Height="600" Width="850"  WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Window.Resources>
         <Style x:Key="FocusVisual">
             <Setter Property="Control.Template">
@@ -26,7 +26,7 @@
         <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style TargetType="{x:Type Button}">
+        <Style x:Key="RoundedButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
             <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -38,7 +38,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="20" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" Margin="0,0,-29,0">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -46,12 +46,12 @@
                                 <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#d5d4d9"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                                <Setter Property="Background" TargetName="border" Value="#EAB01E"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#EAB01E"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                                <Setter Property="Background" TargetName="border" Value="#F1CA68"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#F1CA68"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
@@ -64,53 +64,70 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border Background="Black" CornerRadius="20" Margin="20">
+    <Border Background="#1F2644" CornerRadius="20" Margin="20">
 
-        <StackPanel Margin="20" Background="Black">
+        <Grid Margin="10,30,30,10" Background="#1F2644">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="757*"/>
+                <ColumnDefinition Width="6*"/>
+            </Grid.ColumnDefinitions>
 
+            <Button x:Name="Logout" Height="35" Background="#FA198B" Foreground="White" FontSize="20" Click="CloseIt_Click" Style="{DynamicResource RoundedButtonStyle}" Margin="739,-14,18,499">
+                <materialDesign:PackIcon Kind="Close" Foreground="White" Width="30" Height="28" VerticalAlignment="Center" RenderTransformOrigin="0.9,0.55"/>
+            </Button>
 
+            <Label Content="Wyślij Wniosek" Foreground="White" FontSize="25" HorizontalAlignment="Center" Margin="294,0,288.5,0"/>
+            <StackPanel Margin="45,45,39.5,45" Background="#1F2644">
 
-            <Label Content="Wyślij Wniosek" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
-            <Separator Background="White"/>
-            
-            <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"   SelectionChanged="Send_do_kogo_SelectionChanged" >
-            </ComboBox>
-            <Label />
-            
-            <Label ></Label>
-            <Label x:Name="Data_Start1"  Content="Data Rozpoczęcia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center"/>
-            <DatePicker x:Name="Data_Start" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
-                <DatePicker.Resources>
-                    <Style TargetType="DatePickerTextBox">
-                        <Setter Property="IsReadOnly" Value="True"/>
-                        <Setter Property="Text" Value=" "/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="IsHitTestVisible" Value="False"/>
+                <ComboBox x:Name="Send_do_kogo" Width="228" ItemsSource="{Binding}"   SelectionChanged="Send_do_kogo_SelectionChanged" >
+                </ComboBox>
+                <Label />
+
+                <Label ></Label>
+                <Label x:Name="Data_Start1"  Content="Data Rozpoczęcia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center" Margin="261,0,294,0" Width="115"/>
+                <DatePicker x:Name="Data_Start" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Text" Value=" "/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <Label x:Name="Data_koniecl"  Content="Data Zakończenia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center" Margin="267,0,292,0" Width="122"/>
+                <DatePicker x:Name="Data_koniec" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Text" Value=" "/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Focusable" Value="False"/>
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <Label  Content="Kwota za wymiar 160h:" x:Name="kwotal" Visibility="Hidden" Foreground="Wheat" Margin="259,0,164,0"/>
+                <TextBox x:Name="kwota" Background="White"  PreviewTextInput="NumberValidationTextBox" Height="30" Visibility="Hidden" Foreground="Black" Width="150"  FontSize="18" HorizontalAlignment="Center" />
+            </StackPanel>
+            <Label  Content="Notka:" Foreground="Wheat" Margin="99,250,94,-250"/>
+
+            <TextBox x:Name="Notka" Background="White" Foreground="Black"  FontSize="18" Margin="99,278,66,106" >
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="10"/>
                     </Style>
-                </DatePicker.Resources>
-            </DatePicker>
-            <Label x:Name="Data_koniecl"  Content="Data Zakończenia:" Visibility="Hidden" Foreground="Wheat" HorizontalAlignment="Center"/>
-            <DatePicker x:Name="Data_koniec" HorizontalAlignment="Center" Visibility="Hidden" VerticalAlignment="Top">
-                <DatePicker.Resources>
-                    <Style TargetType="DatePickerTextBox">
-                        <Setter Property="IsReadOnly" Value="True"/>
-                        <Setter Property="Text" Value=" "/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Focusable" Value="False"/>
-                        <Setter Property="IsEnabled" Value="False" />
-                        <Setter Property="IsHitTestVisible" Value="False"/>
-                    </Style>
-                </DatePicker.Resources>
-            </DatePicker>
-            <Label  Content="Kwota:" x:Name="kwotal" Visibility="Hidden" Foreground="Wheat" Margin="378,0"/>
-            <TextBox x:Name="kwota" Background="White"  PreviewTextInput="NumberValidationTextBox" Height="30" Visibility="Hidden" Foreground="Black" Width="150"  FontSize="18" HorizontalAlignment="Center" />
-            <Label  Content="Notka:" Foreground="Wheat" Margin="99,0"/>
-         
-            <TextBox x:Name="Notka" Background="White" Height="100" Foreground="Black"  FontSize="18" Margin="102,0,68,0" />
-            <Button x:Name="Send_wniosek" Click="Send_wniosek_Click" Content="Wyślij"  Width="250" Margin="31,25,0,0" Background="White"    Foreground="Black" FontSize="18" Height="63"/>
+                </TextBox.Resources>
+            </TextBox>
+            <Button x:Name="Send_msg" Click="Send_wniosek_Click" Content="Wyślij" HorizontalAlignment="Left" Height="40"  Margin="293,454,0,0" VerticalAlignment="Top" Width="166"
+                Background="#FA198B"
+                Foreground="White"
+                FontFamily="Arial"
+                FontSize="20" Style="{DynamicResource RoundedButtonStyle}"/>
 
-        </StackPanel>
+        </Grid>
     </Border>
 </Window>

@@ -158,7 +158,7 @@ namespace Project.MVVM.View
             if (Send_do_kogo.SelectedValue != null)
             {
                 int id_wniosku = (int)Send_do_kogo.SelectedValue;
-                Trace.WriteLine(typ_wniosku);
+              
                 using (var db = new DBPROJECT())
                 {
                     using (var contex = db.Database.BeginTransaction())
@@ -169,23 +169,22 @@ namespace Project.MVVM.View
                         if (find_wniosek.kwota != null)
                         {
 
-                            Notka.Text = $"Kwota proszonej podwyżki: {find_wniosek.kwota} {newline}  {newline}Załączona wiadomość:{newline}{find_wniosek.Notka}";
+                            Notka.Text = $"Kwota proszonej podwyżki: {find_wniosek.kwota} {newline}  {newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
                         }
                         else
                         {
-                            Notka.Text = $"Zakres nieobecności:  {find_wniosek.Data_rozpoczecia.Date.ToShortDateString()}- {find_wniosek.Data_zakonczenia.Date.ToShortDateString()}{newline}{newline}---------------------------------------------Załączona wiadomość---------------------------------------------{newline}{newline}{find_wniosek.Notka}";
+                            Notka.Text = $"Zakres nieobecności:  {find_wniosek.Data_rozpoczecia.Date.ToShortDateString()}- {find_wniosek.Data_zakonczenia.Date.ToShortDateString()}{newline}{newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
                         }
 
                     }
                 }
             }
-            
-
-
-           
+        }
+        private void CloseIt_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
 
         }
-
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
