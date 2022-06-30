@@ -16,7 +16,8 @@ namespace Project.MVVM.View
             InitializeComponent();
             BindUserlist();
         }
-        public List<wnioski> wniosek { get; set; }
+        public List<wnioski> wniosek { get; set; } //lista utworzona do Combobox'a
+        /*Funkcja bindująca tabele wnioski do combobox'a  */
         private void BindUserlist()
         {
             using (var db = new DBPROJECT())
@@ -32,6 +33,8 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /*Funkcja wykonuje się po kliknięciu w przycisk  Pobiera informacje o obecnie zalogowanym użytkowniku oraz Informacje o wybranym wniosku z Combobox'a
+         *W zależności od wybranego wniosku i spełnienia warunków wykonuje się odpowiednia operacja dodania do bazy danych oraz zwrócenia notifikacji */
         private void Send_wniosek_Click(object sender, RoutedEventArgs e)
         {
             if (Send_do_kogo.SelectedValue != null )
@@ -110,15 +113,18 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno  */
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+        /* Funkcja wywoływana po naciśnięciu lewego przycisku myszki i przytrzymanie go ma za zadanie umożliwić przesuwanie okna */
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
             this.DragMove();
         }
+        /* Funkcja wywoływana przy zmianie opcji w Comboboxi'e w zależności od opcji pokazuje lub chowa różne 'inputy' */
         private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int typ_wniosku = (int)Send_do_kogo.SelectedValue;
@@ -157,6 +163,7 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /*Funkcja wymusza wpisywanie tylko cyfr */
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");

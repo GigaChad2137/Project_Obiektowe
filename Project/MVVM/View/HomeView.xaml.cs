@@ -24,9 +24,12 @@ namespace Project.MVVM.View
             refresh_nowe_wnioski();
             load_home_content();
         }
+        DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+        /*Funkcja tworzy nowy wątek oraz sprawdza zapytaniem do bazy danych co zawiera okleślone pole i na jego podstawie
+        Wyświetla odpowiedni tekst*/
         private void load_home_content()
         {
-            DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Stop();
             dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosciThread);
             dispatcherTimer.Tick += new EventHandler(refresh_nowe_wnioskiThread);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
@@ -57,6 +60,7 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /* Po kliknięciu przycisku funkcja Pokazuje nowe okno */
         private void Pokaz_Wiadomosci(object sender, RoutedEventArgs e)
         {
             ChatView dashboard = new ChatView();
@@ -251,16 +255,19 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /* Po kliknięciu przycisku funkcja Pokazuje nowe okno */
         private void Wyślij_Wiadomość(object sender, RoutedEventArgs e)
         {
             ChatView dashboard = new ChatView();
             dashboard.Show();
         }
+        /* Po kliknięciu przycisku funkcja Pokazuje nowe okno */
         private void Stwórz_Wniosek(object sender, RoutedEventArgs e)
         {
             WnioskiVIew dashboard = new WnioskiVIew();
             dashboard.Show();
         }
+        /* Po kliknięciu przycisku funkcja Pokazuje nowe okno */
         private void Status_Pracy(object sender, RoutedEventArgs e)
         {
             WorkRaportPdf dashboard = new WorkRaportPdf();

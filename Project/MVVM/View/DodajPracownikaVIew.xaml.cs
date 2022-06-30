@@ -16,6 +16,7 @@ namespace Project.MVVM.View
         {
             InitializeComponent();
         }
+        /*Funkcja wywoływana po naciśnięciu przycisku hashuje hasło sprawdza wszystkie warunki i dodaje pracownika do bazy danych */
         private void Register_btnclick_Click(object sender, RoutedEventArgs e)
         {
             byte[] Source;
@@ -129,6 +130,7 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /*Funkcja wymusza wpisywanie tylko cyfr */
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");

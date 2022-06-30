@@ -15,9 +15,15 @@ namespace Project.MVVM.View
             InitializeComponent();
             BindUserlist();
         }
-        public List<Rozpatrz_wnioski> rozpatrz_wnioski = new List<Rozpatrz_wnioski>();
+
+        public List<Rozpatrz_wnioski> rozpatrz_wnioski = new List<Rozpatrz_wnioski>(); //lista stworzona dla Combobox'a
+
+        /*  Funkcja czyści liste rozpatrz_wnioski następnie Wyciąga wszystkich użytkowników oraz wniosek który wysłali
+         *  z warunkiem który wymaga aby wniosek miał status null i wstawia je do wcześniej utworzonej listy       */
+
         private void BindUserlist()
         {
+            rozpatrz_wnioski.Clear();
             using (var db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
@@ -50,6 +56,11 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /*Funkcja wywoływana po naciśnięciu odpowiedniego przycisku wyciąga informacje o obecnie zalogowanym użytkowniku oraz wybranym z ComboBox'a
+         * Następnie wykonuje zapytytanie zwracający 1 napotkany rekord Status wniosku zmienia wartość na true i zapisuje do bazy
+         Jeśli pole kwota było null Tworzy się tablica  która zawiera wszystkie daty które znajdują się pomiędzy wyciągniętymi wcześniej
+        z zapytania Po tym wyciągany jest typ wniosku i zaczyna się petlą która idze po każdej dacie z utworzonej tablicy i w zależności
+        od tego czy rekord istniał podmienia wartośći kolumn lub tworzy nowe rekordy  Następnie wniosek znika a lista combobox'a jest odświeżana*/
         private void Send_akceptuj_wniosek_Click(object sender, RoutedEventArgs e)
         {
             if (Send_do_kogo.SelectedValue!= null)
@@ -74,7 +85,6 @@ namespace Project.MVVM.View
                                                  .Select(offset => start.AddDays(offset))
                                                  .ToArray();
                             var czy_pracuje = db.wnioski.Where(x => x.id == find_wniosek.id_wniosku).First();
-                            Trace.WriteLine(zakres_nieobecnosci.Length);
                             foreach (var dzien in zakres_nieobecnosci)
                             {
                                 var check_date = db.praca.Where(x => x.Id_pracownika == find_wniosek.id_pracownika && x.Data == dzien.Date).FirstOrDefault();
@@ -85,8 +95,11 @@ namespace Project.MVVM.View
                                     check_date.Czy_pracuje = czy_pracuje.typ_wniosku;
                                     db.SaveChanges();
                                 }
-                                db.praca.Add(new praca { Id_pracownika = find_wniosek.id_pracownika, Data = dzien.Date, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = czy_pracuje.typ_wniosku });
-                                db.SaveChanges();
+                                else
+                                {
+                                    db.praca.Add(new praca { Id_pracownika = find_wniosek.id_pracownika, Data = dzien.Date, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = czy_pracuje.typ_wniosku });
+                                    db.SaveChanges();
+                                }
                             }
                         }
                         else
@@ -106,69 +119,77 @@ namespace Project.MVVM.View
                 Send_do_kogo.Items.Refresh();
             }
         }
-        private void Send_odrzuc_wniosek_Click(object sender, RoutedEventArgs e)
-        {
-            if(Send_do_kogo.SelectedValue != null)
-            {
-                int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
-                int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
-                int id_wniosku = (int)Send_do_kogo.SelectedValue;
-                using (var db = new DBPROJECT())
-                {
-                    using (var contex = db.Database.BeginTransaction())
-                    {
-                        var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
-                        find_wniosek.Status_Wniosku = false;
-                        Notka.Text = "";
-                        db.SaveChanges();
-                        contex.Commit();
-                    }
-                }
-                Send_do_kogo.SelectedIndex = -1;
-                Send_do_kogo.ItemsSource = null;
-                rozpatrz_wnioski.Clear();
-                BindUserlist();
-                Send_do_kogo.Items.Refresh();
-            }
-        }
-        private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Send_do_kogo.SelectedValue != null)
-            {
-                int id_wniosku = (int)Send_do_kogo.SelectedValue;
-              
-                using (var db = new DBPROJECT())
-                {
-                    using (var contex = db.Database.BeginTransaction())
-                    {
+        /*Funkcja wywoływana po naciśnięciu odpowiedniego przycisku wyciąga informacje o obecnie zalogowanym użytkowniku oraz wybranym z ComboBox'a
+          * Następnie wykonuje zapytytanie zwracający 1 napotkany rekord Status wniosku zmienia wartość na false i zapisuje do bazy
+         i odświeża liste Combobox'a */
+       private void Send_odrzuc_wniosek_Click(object sender, RoutedEventArgs e)
+       {
+           if(Send_do_kogo.SelectedValue != null)
+           {
+               int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+               string username_currect_user = (string)Application.Current.Properties["currect_user_username"];
+               int id_do_kogo = Convert.ToInt32(Send_do_kogo.SelectedValue.ToString());
+               int id_wniosku = (int)Send_do_kogo.SelectedValue;
+               using (var db = new DBPROJECT())
+               {
+                   using (var contex = db.Database.BeginTransaction())
+                   {
+                       var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                       find_wniosek.Status_Wniosku = false;
+                       Notka.Text = "";
+                       db.SaveChanges();
+                       contex.Commit();
+                   }
+               }
+               Send_do_kogo.SelectedIndex = -1;
+               Send_do_kogo.ItemsSource = null;
+               rozpatrz_wnioski.Clear();
+               BindUserlist();
+               Send_do_kogo.Items.Refresh();
+           }
+       }
+        /* Funkcja wywoływana przy zmianie opcji w combobox'ie Ma za zadanie wyciągnąć przypisany do opcji wniosek z bazy danych
+         * I w zależności od spełnionych warunków uzupełnić RichTextboxa*/
+       private void Send_do_kogo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+       {
+           if (Send_do_kogo.SelectedValue != null)
+           {
+               int id_wniosku = (int)Send_do_kogo.SelectedValue;
 
-                        var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
-                        string newline = Environment.NewLine;
-                        if (find_wniosek.kwota != null)
-                        {
+               using (var db = new DBPROJECT())
+               {
+                   using (var contex = db.Database.BeginTransaction())
+                   {
 
-                            Notka.Text = $"Kwota proszonej podwyżki: {find_wniosek.kwota} {newline}  {newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
-                        }
-                        else
-                        {
-                            Notka.Text = $"Zakres nieobecności:  {find_wniosek.Data_rozpoczecia.Date.ToShortDateString()}- {find_wniosek.Data_zakonczenia.Date.ToShortDateString()}{newline}{newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
-                        }
+                       var find_wniosek = db.user_wnioski.Where(x => x.Id == id_wniosku).First();
+                       string newline = Environment.NewLine;
+                       if (find_wniosek.kwota != null)
+                       {
 
-                    }
-                }
-            }
-        }
+                           Notka.Text = $"Kwota proszonej podwyżki: {find_wniosek.kwota} {newline}  {newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
+                       }
+                       else
+                       {
+                           Notka.Text = $"Zakres nieobecności:  {find_wniosek.Data_rozpoczecia.Date.ToShortDateString()}- {find_wniosek.Data_zakonczenia.Date.ToShortDateString()}{newline}{newline}--------------------------Załączona wiadomość-------------------------{newline}{find_wniosek.Notka}";
+                       }
+
+                   }
+               }
+           }
+       }
+       /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno  */
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+        /* Funkcja wywoływana po naciśnięciu lewego przycisku myszki i przytrzymanie go ma za zadanie umożliwić przesuwanie okna */
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
             this.DragMove();
         }
     }
+    /* Klasa stworzona na potrzeby utworzenia specjalnej listy z potrzebnymi informacjami która się łączy z Combobox'em  */
     public class Rozpatrz_wnioski
     {
         public int id_wniosku { get; set; }

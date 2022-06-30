@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
+
 namespace Project
 {
     public partial class LoginScreen : Window
@@ -71,11 +72,13 @@ namespace Project
             tmpData = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
             return Convert.ToBase64String(tmpData);
         }
+        /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno oraz wyłączyć aplikacje  */
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
             App.Current.Shutdown();
         }
+        /* Funkcja wywoływana po naciśnięciu lewego przycisku myszki i przytrzymanie go ma za zadanie umożliwić przesuwanie okna */
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);

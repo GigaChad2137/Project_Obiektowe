@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Project.MVVM.ViewModel
 {
+    /*Klasa stworzona do Notifikacji z modułu notifications.wpf */
     class NotificationsControlViewModel : PropertyChangedBase
     {
         private readonly INotificationManager nManger;
@@ -18,11 +19,6 @@ namespace Project.MVVM.ViewModel
         public NotificationsControlViewModel(INotificationManager manager)
         {
             nManger = manager;
-        }
-
-        public void Okay()
-        {
-            nManger.Show(new NotificationContent { Title = "Succes", Message = "okay" });
         }
     }
 }
