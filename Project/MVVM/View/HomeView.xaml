@@ -150,8 +150,8 @@
 
                 </Border>
                 <Border Width="150" Height="150" Background="#00A6ED" CornerRadius="10">
-                    <Button Click="Czy_Pracuje" Background="Transparent"  HorizontalAlignment="Center" Padding="0,20,20,20" Width="150">
-                        <TextBlock  x:Name="Czy_pracuje"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="15" Margin="10,10,10,0">
+                    <Button Click="Czy_Pracuje" Background="Transparent"  HorizontalAlignment="Center" Width="150">
+                        <TextBlock  x:Name="Czy_pracuje"  Text="{Binding UpdateSourceTrigger=PropertyChanged}" Foreground="White"  FontSize="17" Margin="10,10,10,0">
                             
                         </TextBlock>
                     </Button>

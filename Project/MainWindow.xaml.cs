@@ -9,11 +9,14 @@ namespace Project
         {
             InitializeComponent();
         }
+
+        /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno oraz wyłączyć aplikacje  */
         private void CloseIt_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
             App.Current.Shutdown();
         }
+        /* Funkcja wywoływana po naciśnięciu lewego przycisku myszki i przytrzymanie go ma za zadanie umożliwić przesuwanie okna */
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);

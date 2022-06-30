@@ -13,14 +13,20 @@ namespace Project.MVVM.View
             InitializeComponent();
             fillList();
         }
+        /* Funkcja ma uzupełnić Listview w wyświetlanym oknie zaczyna od utworzenia listy pobrania id obecnie zalogowanego usera
+         * wykonuje operacje znajdując pierwszy i ostatni dzień poprzedniego miesiąca następnie znajduje w bazie danych informacje
+         o wynagrodzeniu użytkownika i wylicza jego wynagrodzenie na godzine dalej znajduje wszystkie dni z poprzedniego miesiąca
+        ktore "przepracował czyli data rozpoczęcia i zakończenia nie były null i w pętli zaczyna liczyć dla każdego dnia który został
+        zwrócony ile godzin pracował łącznie a potem sume ile zarobił w dany dzień (w międzyczasie liczy ile zarobił za cały miesiąc)
+        a następnie dodaje nowy  obiekt do listy którą binduje do Listview*/
         private void fillList()
         {
             List<Pdf_view> items = new List<Pdf_view>();
             int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
             var today = DateTime.Today;
             var month = new DateTime(today.Year, today.Month, 1);
-            var first = month.AddMonths(-0);
-            var last = month.AddDays(+29);
+            var first = month.AddMonths(-1);
+            var last = month.AddDays(-1);
             double suma_miesiac = 0;
             using (var db = new DBPROJECT())
             {
@@ -45,6 +51,7 @@ namespace Project.MVVM.View
                 }
             }
         }
+        /* Funkcja która wywołuje się po kliknięciu otwiera pole do konfiguracji drukowania  */
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -62,7 +69,8 @@ namespace Project.MVVM.View
             }
         }
     }
-    public class Pdf_view
+
+    public class Pdf_view //klasa stworzona na potrzeby uzupełnienia Listview 
     {
         public string data { get; set; }
         public TimeSpan? czas_start { get; set; }
