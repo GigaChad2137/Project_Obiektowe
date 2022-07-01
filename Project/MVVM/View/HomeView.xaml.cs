@@ -57,6 +57,10 @@ namespace Project.MVVM.View
                     {
                         Czy_pracuje.DataContext = "L4";
                     }
+                    else
+                    {
+                        Czy_pracuje.DataContext = czy_pracuje.Czy_pracuje;
+                    }
                 }
             }
         }
