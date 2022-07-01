@@ -10,9 +10,23 @@ namespace Project.MVVM.View
         public PracownicyView()
         {
             InitializeComponent();
+            DataFill();
+        }
+        public class Pracownicy
+        {
+            public string Imie_pracownika { get; set; }
+            public string Nazwisko_pracownika { get; set; }
+            public string Rola_pracownika { get; set; }
+            public int Zarobki_pracownika { get; set; }
+            public string Czy_pracuje { get; set; }
+        }
+        /* Funkcja wykonyuje zapytanie do bazy danych i wyciąga z niej potrzebne informacje, które następnie z urzyciem pętli foreach 
+         * sprawdza warunki(zapytanie do bazy danych) i w zależności od tego czy warunki zostały spełnione wstawia do DataGrid'a */
+        private void DataFill()
+        {
             using (DBPROJECT db = new DBPROJECT())
             {
-                using(var contex = db.Database.BeginTransaction())
+                using (var contex = db.Database.BeginTransaction())
                 {
                     var id_finder = (from users in db.users
                                      join user_roles in db.user_roles on users.Id equals user_roles.id_user
@@ -40,7 +54,7 @@ namespace Project.MVVM.View
                                 Rola_pracownika = p.Rola,
                                 Zarobki_pracownika = p.Zarobki,
                                 Czy_pracuje = praca_checker.Czy_pracuje,
-                              
+
                             }
                             );
                         }
@@ -56,21 +70,13 @@ namespace Project.MVVM.View
                                 Rola_pracownika = p.Rola,
                                 Zarobki_pracownika = p.Zarobki,
                                 Czy_pracuje = "Nie Pracuje",
-         
+
                             });
                         }
                     }
                     contex.Commit();
                 }
             }
-        }
-        public class Pracownicy
-        {
-            public string Imie_pracownika { get; set; }
-            public string Nazwisko_pracownika { get; set; }
-            public string Rola_pracownika { get; set; }
-            public int Zarobki_pracownika { get; set; }
-            public string Czy_pracuje { get; set; }
         }
     }
 }

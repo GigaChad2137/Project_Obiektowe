@@ -5,9 +5,10 @@ namespace Project
 {
     public partial class MainWindow : Window
     {
-        public MainWindow( )
+        public MainWindow()
         {
             InitializeComponent();
+            cur_username.Text = (string)Application.Current.Properties["currect_user_username"];
         }
 
         /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno oraz wyłączyć aplikacje  */
@@ -22,6 +23,8 @@ namespace Project
             base.OnMouseLeftButtonDown(e);
             this.DragMove();
         }
+
+        // zainicjowanie klasy LoginScreen, nastepnie otwarcie okna LoginScreen i zamknięcie okna MainWindow
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
             LoginScreen dashboard = new LoginScreen();

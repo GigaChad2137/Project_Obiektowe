@@ -21,55 +21,55 @@ namespace Project.MVVM.View
         {
             byte[] Source;
             byte[] hashed_Data;
-            var reg_user = Register_username.Text;
+            var reg_user = Register_username.Text; //zmienne, które mają wartości wyciągnięte z formularza
             var reg_passwd = Register_password.Password;
             var reg_retype_passwd = Register_retypePassword.Password;
             var reg_imie = Register_Imie.Text;
             var reg_nazwisko = Register_Nazwisko.Text;
             DateTime today = DateTime.Today;
             var notificationManager = new NotificationManager();
-            var reg_zarobki_check =Int32.TryParse(Register_Zarobki.Text, out int reg_zarobki);
-            using (DBPROJECT db = new DBPROJECT())
+            var reg_zarobki_check =Int32.TryParse(Register_Zarobki.Text, out int reg_zarobki); // próba przeparsowania stringa do inta 
+            using (DBPROJECT db = new DBPROJECT()) //otowarzenie polaczenia z baza danych
             {
-                using (var contex = db.Database.BeginTransaction())
+                using (var contex = db.Database.BeginTransaction()) //otowarzenie transakcji
                 {
-                    if (db.users.Where(c => c.username == reg_user).Count() > 0)
+                    if (db.users.Where(c => c.username == reg_user).Count() > 0) //zapytanie do bazy danych sprawdzajace czy podany uzytkownik istnieje
                     {
-                        notificationManager.Show(new NotificationContent
+                        notificationManager.Show(new NotificationContent // jeśli tak wysiwetla notyfikacje typu error
                         {
                             Title = $" Błędna Nazwa użytkownika",
                             Message = $"Podany użytkownik już istnieje!{Environment.NewLine}",
                             Type = NotificationType.Error
                         });
                     }
-                    else
+                    else // w przeciwnym wypadku 
                     {
-                        if (reg_user != "" && reg_user.Length >= 4)
+                        if (reg_user != "" && reg_user.Length >= 4) //jezeli username nie jest pusty i dlugosc username jest wieksza lub rowna  4 
                         {
-                            if (reg_passwd == reg_retype_passwd && reg_passwd != "" && reg_passwd.Length > 4 && reg_passwd.Length < 20 && reg_zarobki > 0 && reg_imie != "" && reg_nazwisko != "")
+                            if (reg_passwd == reg_retype_passwd && reg_passwd != "" && reg_passwd.Length >= 4  && reg_passwd.Length <= 20 && reg_zarobki > 0 && reg_imie != "" && reg_nazwisko != "") //jezeli haslo i powtorz_haslo jest rowne i haslo nie jest puste i dlugosc hasla jest wieksza/rowna 4 i dlugosc hasla jest mneijsza/rowna 20 i zarobki sa wieksze od 0 i imie nie jest puste i nazwisko nie jest puste
                             {
                                 Source = ASCIIEncoding.ASCII.GetBytes(Register_retypePassword.Password);
                                 hashed_Data = new MD5CryptoServiceProvider().ComputeHash(Source);
                                 string passwd_hash = Convert.ToBase64String(hashed_Data);
                                 users new_usr = new users { username = Register_username.Text, password = passwd_hash };
-                                db.users.Add(new_usr);
+                                db.users.Add(new_usr); //dodanie nowego użytkownika do tabeli
                                 if (Register_czy_szef.IsChecked == true)
                                 {
-                                    db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 1 });
+                                    db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 1 }); //dodanie rekordu do tabeli user_roles (są to uprawnienia admina) 
                                 }
-                                else
+                                else 
                                 {
-                                    db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 2 });
+                                    db.user_roles.Add(new user_roles { id_user = new_usr.Id, id_role = 2 }); //dodanie rekordu do tabeli user_roles (są to uprawnienia użytkownika) 
                                 }
-                                db.informacje_personalne.Add(new informacje_personalne { Id_pracownika = new_usr.Id, Imie = reg_imie, Nazwisko = reg_nazwisko, Zarobki = reg_zarobki, Dni_urlopowe = 30, Data_zatrudnienia = today });
-                                notificationManager.Show(new NotificationContent
+                                db.informacje_personalne.Add(new informacje_personalne { Id_pracownika = new_usr.Id, Imie = reg_imie, Nazwisko = reg_nazwisko, Zarobki = reg_zarobki, Dni_urlopowe = 30, Data_zatrudnienia = today }); //dodanie rekordu do tabeli informacje_personalne
+                                notificationManager.Show(new NotificationContent //wyswietlenie notyfikacji typu sukces
                                 {
                                     Title = $"Dodano Pracownika",
                                     Message = $"Pracownik {reg_imie} {reg_nazwisko}{Environment.NewLine}Pomyśnie Dodany",
                                     Type = NotificationType.Success
                                 });
                             }
-                            else if (reg_passwd == "")
+                            else if (reg_passwd == "") 
                             {
                                 notificationManager.Show(new NotificationContent
                                 {
@@ -125,8 +125,8 @@ namespace Project.MVVM.View
                             });
                         }
                     }
-                    db.SaveChanges();
-                    contex.Commit();
+                    db.SaveChanges(); //zapisanie zmiań
+                    contex.Commit(); //commit transakcji
                 }
             }
         }

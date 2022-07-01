@@ -95,7 +95,7 @@
 
             <ContentControl Grid.Row="1" Grid.Column="1" Margin="10" Content="{Binding CurrentView}"/>
 
-            <TextBlock x:Name="cur_username" Text="użytkownik" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,489,0,9" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins" RenderTransformOrigin="0.5,1.068" Grid.Row="1"/>
+            <TextBlock x:Name="cur_username" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,489,0,9" Foreground="White" FontSize="22" FontFamily="/Fonts/#Poppins" RenderTransformOrigin="0.5,1.068" Grid.Row="1"/>
         </Grid>
 
     </Border>

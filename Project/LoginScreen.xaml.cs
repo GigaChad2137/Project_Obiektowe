@@ -17,31 +17,31 @@ namespace Project
         }
         private void btnSubmit_Click(object sender, RoutedEventArgs e)
         {
-            using (var db = new DBPROJECT())
+            using (var db = new DBPROJECT()) //otworzenie połączenia z baza danych i użycie jej
             {
-                using (var contex = db.Database.BeginTransaction())
+                using (var contex = db.Database.BeginTransaction())  //stworzenie transakcji w bazie danych i użycie jej
                 {
-                    var passwdhashed = GetHashedText(txtPassword.Password);
-                    if (db.users.Where(c => c.username == txtUsername.Text && c.password == passwdhashed).Count() > 0)
+                    var passwdhashed = GetHashedText(txtPassword.Password);  // zmienna przechowująca zahashowane hasło, które zostało pobrane z password boxa 
+                    if (db.users.Where(c => c.username == txtUsername.Text && c.password == passwdhashed).Count() > 0) // zapytanie do bazy danych, które sprawdza czy użytkownik o podanych danych pobranych z formularza
                     {
-                        var id_finder = from c in db.users where c.username == txtUsername.Text select c;
-                        var id_checker = id_finder.FirstOrDefault<users>();
-                        DateTime thisDay = DateTime.Today;
-                        var czy_pracuje = db.praca.Where(x => x.Id_pracownika == id_checker.Id && x.Data == thisDay).Count();
-                        if(czy_pracuje == 0)
+                        var id_finder = from c in db.users where c.username == txtUsername.Text select c; // zapytanie do bazy danych zwracające wszystkie rekordy pasujące do wymagań
+                        var id_checker = id_finder.FirstOrDefault<users>();  //funkcja zwracająca pierwszy wiersz z wcześniejszego zapytania
+                        DateTime thisDay = DateTime.Today; //zmienna zawierająca aktualną date
+                        var czy_pracuje = db.praca.Where(x => x.Id_pracownika == id_checker.Id && x.Data == thisDay).Count(); // zapytanie do bazy danych, które zlicza ilość zwróconych rekordów
+                        if (czy_pracuje == 0)  // jeżeli zapytanie zwróci 0 to wykona się zapisanie rekordu i commit transakcji - czyli dodanie rekordu do bazy danych
                         {
                             db.praca.Add(new praca { Id_pracownika = id_checker.Id, Data = thisDay, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Nie Pracuje" });
                             db.SaveChanges();
                             contex.Commit();
                         }
-                        Application.Current.Properties["currect_user_username"] = txtUsername.Text;
+                        Application.Current.Properties["currect_user_username"] = txtUsername.Text; // słownik który służy do przechowywania przekazanej informacji z której moge korzystać z dowolnego miejsca
                         Application.Current.Properties["currect_user_id"] = id_checker.Id;
-                        if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0)
+                        if (db.user_roles.Where(c => c.id_user == id_checker.Id && c.id_role == 1).Count() > 0) //zapytanie sprawdzajace czy użytkownik posiada uprawnienia
                         {
                             Application.Current.Properties["currect_user_admin"] = true;
-                            MainWindow dashboard = new MainWindow();    
-                            dashboard.Show();
-                            this.Close();
+                            MainWindow dashboard = new MainWindow();  //zainicjowanie klasy mainwindow
+                            dashboard.Show(); //pokazanie okna mainwindow
+                            this.Close();  // zamknięcie okna logowania
                         }
                         else
                         {
@@ -64,13 +64,13 @@ namespace Project
                 }
             }
         }
-        private string GetHashedText(string inputData)
+        private string GetHashedText(string inputData) //funkcja hashująca 
         {
             byte[] tmpSource;
             byte[] tmpData;
-            tmpSource = ASCIIEncoding.ASCII.GetBytes(inputData);
-            tmpData = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
-            return Convert.ToBase64String(tmpData);
+            tmpSource = ASCIIEncoding.ASCII.GetBytes(inputData); //przekonwertowuje do typu byte 
+            tmpData = new MD5CryptoServiceProvider().ComputeHash(tmpSource); // użycie gotowej funkcji, która hashuje przekazaną tablice
+            return Convert.ToBase64String(tmpData); //zahashowaną tablice przekonwertowywuje do stringa i następnia zwraca
         }
         /* Funkcja wywoływana po naciśnięciu przycisku ma za zadanie zamknąć bierzące okno oraz wyłączyć aplikacje  */
         private void CloseIt_Click(object sender, RoutedEventArgs e)

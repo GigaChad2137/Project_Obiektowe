@@ -20,14 +20,14 @@ namespace Project.MVVM.View
         public HomeView()
         {
             InitializeComponent();
-            Pokaz_wiadomosci.DataContext = $"Witaj!";
+            Pokaz_wiadomosci.DataContext = $"Witaj!"; // pokazuje w textboxie określony string
             refresh_nowe_wnioski();
             load_home_content();
         }
         DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
         /*Funkcja tworzy nowy wątek oraz sprawdza zapytaniem do bazy danych co zawiera okleślone pole i na jego podstawie
         Wyświetla odpowiedni tekst*/
-        private void load_home_content()
+        private void load_home_content() 
         {
             dispatcherTimer.Stop();
             dispatcherTimer.Tick += new EventHandler(refresh_nowe_wiadomosciThread);
@@ -39,9 +39,9 @@ namespace Project.MVVM.View
                 using (var contex = db.Database.BeginTransaction())
                 {
                     DateTime thisDay = DateTime.Today;
-                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                    var czy_pracuje = db.praca.First(x => x.Id_pracownika == id_currect_user && x.Data == thisDay);
-                    if (czy_pracuje.Czy_pracuje == "Pracuje")
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"]; //wyciągnięcie z ACP wartości z określonego słownika
+                    var czy_pracuje = db.praca.First(x => x.Id_pracownika == id_currect_user && x.Data == thisDay); // zwraca pierwszy napotkany rekord o określonych warunkach
+                    if (czy_pracuje.Czy_pracuje == "Pracuje")// w zależności od wykonanego warunku, wyświetli się odpowiedni string w textboxie "Czy_pracuje"
                     {
                         Czy_pracuje.DataContext = "Zakończ Prace";
                     }
@@ -70,13 +70,14 @@ namespace Project.MVVM.View
             ChatView dashboard = new ChatView();
             dashboard.Show();
         }
-        private void refresh_nowe_wiadomosciThread(object source, EventArgs e)
+        /*Funkcja wykonuje zapytanie do bazy danych, które zlicza ile nieprzeczytanych wiadomości posiada*/
+        private void refresh_nowe_wiadomosciThread(object source, EventArgs e) 
         {
             using (DBPROJECT db = new DBPROJECT())
             {
                 using (var contex = db.Database.BeginTransaction())
                 {
-                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
+                    int id_currect_user = (int)Application.Current.Properties["currect_user_id"]; //wyciągnięcie wartości z podanego słownika
                     var przeczytane = db.wiadomosci.Where(a => a.id_odbiorcy == id_currect_user && a.czy_przeczytane==false).Count();
                     if(przeczytane == 0)
                     {
@@ -100,7 +101,7 @@ namespace Project.MVVM.View
                 using (var contex = db.Database.BeginTransaction())
                 {
                     int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                    if ((bool)Application.Current.Properties["currect_user_admin"] == true)
+                    if ((bool)Application.Current.Properties["currect_user_admin"] == true) // jeżeli currect_user_admin posiada wartość true to pętla wykonuje zapytanie do bazy danych, które zlicza ilość rekorów w tabeli user_wnioski ze statusem null
                     {
                         var przeczytane = db.user_wnioski.Where(a =>a.Status_Wniosku == null).Count();
                         if (przeczytane == 0)
@@ -116,7 +117,7 @@ namespace Project.MVVM.View
                             Pokaz_wnioski.DataContext = $"  {przeczytane} Nowe Wnioski";
                         }
                     }
-                    else
+                    else //jeżeli currect_user_admin posiada wartość false to pętla wykonuje zapytanie do bazy danych, które zlicza ilość rekorów w tabeli user_wnioski z podanymi warunkami i w zależności od tego wyświetla odpowiedni string 
                     {
                         var przeczytane = db.user_wnioski.Where(a => a.id_pracownika == id_currect_user && a.noti_c < 1 && a.Status_Wniosku != null).Count();
                         if (przeczytane == 0)
@@ -137,7 +138,7 @@ namespace Project.MVVM.View
         }
         private void Pokaz_Wnioski(object sender, RoutedEventArgs e)
         {
-            if ((bool)Application.Current.Properties["currect_user_admin"] == true)
+            if ((bool)Application.Current.Properties["currect_user_admin"] == true)  // jeżeli instrukcja warunkowa będzie spełniona to zainicjuje i wyświetli się klasa WnioskiVIewAdmin 
             {
                 WnioskiVIewAdmin dashboard = new WnioskiVIewAdmin();
                 dashboard.Show();
@@ -149,17 +150,17 @@ namespace Project.MVVM.View
                     using (var contex = db.Database.BeginTransaction())
                     {
                         int id_currect_user = (int)Application.Current.Properties["currect_user_id"];
-                        var statusy = db.user_wnioski.Where(x => x.id_pracownika == id_currect_user && x.Status_Wniosku != null && x.noti_c <3).ToList();
-                        var notificationManager = new NotificationManager();
-                        var starytype = NotificationType.Success;
-                        foreach (var status in  statusy)
+                        var statusy = db.user_wnioski.Where(x => x.id_pracownika == id_currect_user && x.Status_Wniosku != null && x.noti_c <3).ToList();  //  wykonuje się zapytanie do bazy danych które zwraca ilośc rekordów o podanych warunkach i zamieszcza je w liście 
+                        var notificationManager = new NotificationManager(); //zainicjowanie NotificationManager (jest to moduł)
+                        var starytype = NotificationType.Success;//zmienna zawierająca typ notyfikacji
+                        foreach (var status in  statusy)// pętla wykonująca się po liście zwróconych rekordów z wczesniejszego zapytania 
                         {
-                            if(status.noti_c > 0)
+                            if(status.noti_c > 0)  // jeżeli instrukcja warunkowa będzie spełniona to zmieni się typ notyfikacji
                             {
                                  starytype = NotificationType.Information;
                             }
-                            var znajdz_status = db.wnioski.Where(x => x.id == status.id_wniosku).First();
-                            if (status.Status_Wniosku == true)
+                            var znajdz_status = db.wnioski.Where(x => x.id == status.id_wniosku).First();// zapytanie do bazy danych zwracające pierwszy rekord o podanych warunkach 
+                            if (status.Status_Wniosku == true) //w zależności od wykonanej instrukcji warunkowej wyświetlenii się odpowiednia notyfikacja o podanych parametrach
                             {
                                 if (status.kwota == null)
                                 {
@@ -209,10 +210,10 @@ namespace Project.MVVM.View
                                     });
                                 }
                             }
-                            status.noti_c = status.noti_c + 1;
-                            db.SaveChanges();
+                            status.noti_c = status.noti_c + 1; // zwiększenie wartości kolumny noti_c o 1 
+                            db.SaveChanges(); //zapisanie zmian
                         }
-                        contex.Commit();
+                        contex.Commit(); // commit transakcji
                     }
                 }
             }
@@ -277,6 +278,7 @@ namespace Project.MVVM.View
             WorkRaportPdf dashboard = new WorkRaportPdf();
             dashboard.Show();
         }
+        /*Funkcja wykonuje zapytanie zwracające pierwszy napotkany rekord o podanych warunkach i w zależności od instrukcji warunkowej wykonuje update na odpowiednich kolumnach i zmienia wyświetlanego stringa. Zapisuje zmiany i commituje transakcje*/
         private void Czy_Pracuje(object sender, RoutedEventArgs e)
         {   
             using(DBPROJECT db = new DBPROJECT())

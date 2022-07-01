@@ -40,7 +40,7 @@ namespace Project.MVVM.View
                         double suma_dzien = 0;
                         TimeSpan? godziny_przepracowane = dzien.Data_zakonczenia - dzien.Data_rozpoczecia;
                         suma_dzien = Math.Round(godziny_przepracowane.Value.TotalHours * zarobek_na_godzine, 2);
-                        items.Add(new Pdf_view { data = dzien.Data.ToString(), czas_start = dzien.Data_rozpoczecia.Value.TimeOfDay, czas_stop = dzien.Data_zakonczenia.Value.TimeOfDay, godziny = $"{Math.Round(godziny_przepracowane.Value.TotalHours, 2)}h", kwota = $"{suma_dzien}zł" });
+                        items.Add(new Pdf_view { data = dzien.Data.ToShortDateString(), czas_start = dzien.Data_rozpoczecia.Value.TimeOfDay, czas_stop = dzien.Data_zakonczenia.Value.TimeOfDay, godziny = $"{Math.Round(godziny_przepracowane.Value.TotalHours, 2)}h", kwota = $"{suma_dzien}zł" });
                         suma_miesiac = suma_miesiac + suma_dzien;
                     }
                     Listviewpdf.ItemsSource = items;
