@@ -47,7 +47,7 @@ namespace Project.MVVM.View
                         else
                         {
                             var pracownik = db.Set<praca>();
-                            db.praca.Add(new praca { Id_pracownika = p.Id, Data = DateTime.Today, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Poza Pracą" });
+                            db.praca.Add(new praca { Id_pracownika = p.Id, Data = DateTime.Today, Data_rozpoczecia = null, Data_zakonczenia = null, Czy_pracuje = "Nie Pracuje" });
                             db.SaveChanges();
                             PracownicyGrid.Items.Add(new Pracownicy
                             {
@@ -55,7 +55,7 @@ namespace Project.MVVM.View
                                 Nazwisko_pracownika = p.Nazwisko,
                                 Rola_pracownika = p.Rola,
                                 Zarobki_pracownika = p.Zarobki,
-                                Czy_pracuje = "Poza Pracą",
+                                Czy_pracuje = "Nie Pracuje",
          
                             });
                         }
